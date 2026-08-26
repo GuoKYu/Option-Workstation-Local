@@ -1,0 +1,2490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OptionWorkstation 文档站</title>
+<style>
+  :root{
+    --bg:#f5f7fa; --panel:#ffffff; --ink:#1f2329; --muted:#646a73;
+    --line:#e7e7e7; --brand:#0052d9; --brand-soft:#ecf2fe; --code-bg:#f3f3f3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI","Microsoft YaHei",system-ui,Arial,sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
+  header{background:var(--brand);color:#fff;padding:14px 22px;position:sticky;top:0;z-index:20;
+         box-shadow:0 2px 8px rgba(0,0,0,.12)}
+  header h1{margin:0;font-size:18px;font-weight:600;letter-spacing:.3px}
+  header small{opacity:.85;font-weight:400}
+  .layout{display:flex;min-height:calc(100vh - 52px)}
+  nav{width:268px;flex:0 0 268px;background:var(--panel);border-right:1px solid var(--line);
+       padding:14px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow:auto}
+  nav a{display:block;padding:9px 20px;color:var(--muted);text-decoration:none;font-size:14px;
+        border-left:3px solid transparent}
+  nav a:hover{background:var(--brand-soft);color:var(--brand)}
+  nav a.active{color:var(--brand);border-left-color:var(--brand);background:var(--brand-soft);font-weight:600}
+  nav .grp{padding:10px 20px 4px;font-size:12px;text-transform:uppercase;color:#a6a6a6;letter-spacing:.5px}
+  main{flex:1;padding:28px 40px 80px;max-width:980px;margin:0 auto}
+  main h1{font-size:25px;margin:.2em 0 .6em;border-bottom:2px solid var(--brand);padding-bottom:.3em}
+  main h2{font-size:20px;margin:1.6em 0 .6em;color:#0052d9;font-weight:600}
+  main h3{font-size:16.5px;margin:1.3em 0 .4em}
+  main h4{font-size:14.5px;margin:1.1em 0 .3em;color:#366ef4}
+  main p{margin:.5em 0}
+  main table{border-collapse:collapse;width:100%;margin:1em 0;font-size:14px}
+  main th,main td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  main th{background:var(--brand-soft);color:var(--brand);font-weight:600}
+  main tr:nth-child(even) td{background:#fafbfc}
+  main code{background:var(--code-bg);padding:2px 6px;border-radius:4px;font-size:13px;
+            font-family:"Cascadia Code",Consolas,monospace;color:#c00}
+  main pre{background:#1e1e1e;color:#e6e6e6;padding:16px 18px;border-radius:8px;overflow:auto;
+            font-size:13px;line-height:1.55;font-family:"Cascadia Code",Consolas,monospace}
+  main pre code{background:none;color:inherit;padding:0}
+  main blockquote{border-left:4px solid var(--brand);margin:1em 0;padding:.4em 14px;background:var(--brand-soft);color:#333}
+  main ul,main ol{padding-left:1.5em;margin:.5em 0}
+  main a{color:var(--brand)}
+  .doc{display:none}
+  .doc.active{display:block}
+  .fx{position:fixed;right:18px;bottom:18px;background:var(--brand);color:#fff;border:none;
+       padding:10px 16px;border-radius:24px;font-size:13px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+  @media(max-width:760px){nav{display:none}main{padding:18px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>OptionWorkstation <small>· 项目配套文档站（离线版）</small></h1>
+</header>
+<div class="layout">
+  <nav>
+    <div class="grp">文档导航</div>
+    <a href="#doc-0" data-i="0">文档总览</a>
+    <a href="#doc-1" data-i="1">01 项目章程</a>
+    <a href="#doc-2" data-i="2">02 需求规格说明书</a>
+    <a href="#doc-3" data-i="3">03 架构设计说明书</a>
+    <a href="#doc-4" data-i="4">04 接口设计说明书</a>
+    <a href="#doc-5" data-i="5">05 项目计划</a>
+    <a href="#doc-6" data-i="6">06 需求跟踪矩阵</a>
+    <a href="#doc-7" data-i="7">07 风险登记册</a>
+    <a href="#doc-8" data-i="8">08 测试计划与用例</a>
+    <a href="#doc-9" data-i="9">09 验收标准</a>
+    <a href="#doc-10" data-i="10">10 配置与版本管理</a>
+    <a href="#doc-11" data-i="11">R4 交易API排查清单</a>
+    <a href="#doc-12" data-i="12">操作手册（根目录）</a>
+    <a href="#doc-13" data-i="13">README 索引</a>
+  </nav>
+  <main>
+    <section class="doc" id="doc-0"><h1 id="optionworkstation">OptionWorkstation 文档总览</h1>
+<blockquote>
+<p>编制日期：2026-08-26 ｜ 文档包版本：v1.0 ｜ 对应 app：v0.1.0</p>
+</blockquote>
+<p>本仓库用于<strong>美股期权分析工作站 OptionWorkstation</strong> 的本地部署与项目管理。文档按"总览 → 需求 → 设计 → 管理 → 验收"的顺序组织，阅读顺序见下表。</p>
+<h2 id="_1">文档阅读路线</h2>
+<table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>文档</th>
+<th>用途</th>
+<th>受众</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>文档总览（本页）</td>
+<td>索引与阅读顺序</td>
+<td>全部</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>01-项目章程.md</code></td>
+<td>目标、范围、里程碑、干系人、风险</td>
+<td>发起人/PM</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>02-需求规格说明书.md</code></td>
+<td>FR-01~21 + NFR-01~06 功能与非功能需求</td>
+<td>产品/开发/测试</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>03-架构设计说明书.md</code></td>
+<td>单体架构、技术栈、8 模块职责、数据流</td>
+<td>架构/开发</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>04-接口设计说明书.md</code></td>
+<td>REST + WebSocket 全部端点、参数、示例</td>
+<td>开发/联调</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>05-项目计划.md</code></td>
+<td>WBS、里程碑、关键路径</td>
+<td>PM</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>06-需求跟踪矩阵.md</code></td>
+<td>需求→设计→实现→测试→验收追溯</td>
+<td>PM/QA</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>07-风险登记册.md</code></td>
+<td>8 项风险（R1 期权权限 / R4 交易 API 高）</td>
+<td>PM/干系人</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>08-测试计划与测试用例.md</code></td>
+<td>单元/集成/E2E，23 条用例</td>
+<td>QA</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>09-验收标准.md</code></td>
+<td>验收清单与结论分级</td>
+<td>发起人/QA</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>10-配置与版本管理计划.md</code></td>
+<td>语义化版本、<code>main</code>/<code>cloud</code> 分支、配置项、密钥</td>
+<td>开发/运维</td>
+</tr>
+<tr>
+<td>R4</td>
+<td><code>R4-交易API排查清单.md</code></td>
+<td>Trade API = Unavailable 专项排查（live.rs:752）</td>
+<td>运维/用户</td>
+</tr>
+<tr>
+<td>手册</td>
+<td><code>操作手册.md</code>（仓库根）</td>
+<td>从装机到排障的实操步骤</td>
+<td>使用者</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">关键外部依赖（必读）</h2>
+<ol>
+<li><strong>长桥行情权限</strong>：期权实时报价需单独开通 <strong>「OPRA 美股期权行情 (OpenAPI)」</strong>（App/Web 端同名权限不认 OpenAPI）。缺失时界面显示 <em>selected expiration has no usable quotes yet</em>。验证：<code>code=301604: no quote access</code>。</li>
+<li><strong>Trade API</strong>：当前版本显示 <strong>Unavailable</strong>（见 R4 清单）。即便开通，本版仅支持模拟账户(paper)模拟单，实盘锁定。</li>
+<li><strong>限频保护</strong>：期权请求 65s 全局冷却（<code>live.rs:47</code>），触发时前端排队提示约 59s 自动重试（无害）。</li>
+</ol>
+<h2 id="_3">仓库结构</h2>
+<div class="codehilite"><pre><span></span><code>optionworkstation/
+├─ rust-backend/        Rust(axum) 后端，端口 7311
+├─ frontend/            React 19 + echarts 前端
+├─ docs/                本文档包（11+ 份）
+├─ docs-site/           离线 HTML 文档站（index.html，本地可点开）
+├─ 操作手册.md           根目录实操手册
+├─ build-local.bat      改动代码后重新编译+启动
+├─ start.bat            日常启动（不重编）
+└─ install-mingw-gnu.bat 首次 MinGW GNU 工具链安装
+</code></pre></div>
+
+<h2 id="_4">如何更新文档站</h2>
+<p>文档为静态 Markdown，修改 <code>docs/*.md</code> 后重跑构建即可生成离线站：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd </span><span class="n">docs-site</span>
+<span class="n">python</span> <span class="n">build</span><span class="p">.</span><span class="n">py</span>        <span class="c"># 输出 docs-site/index.html</span>
+</code></pre></div>
+
+<p>离线站为单文件 HTML（含左侧导航、无外部网络请求），可直接双击打开或随仓库分发。</p></section>
+<section class="doc" id="doc-1"><h1 id="optionworkstation-project-charter">OptionWorkstation 项目章程（Project Charter）</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24 ｜ 编制：产品/工程负责人
+配套文档包：<code>docs/</code> 全套；运行文档：<code>操作手册.md</code></p>
+</blockquote>
+<hr />
+<h2 id="1">1. 项目背景</h2>
+<p>OptionWorkstation 是一个<strong>本地部署</strong>的美股期权分析工作站，面向期权研究者、量化爱好者与交易前分析场景，提供期权链、波动率曲面建模、多腿策略损益分析与研究审计台账能力。项目首期以"本地单机、数据自管、免云端依赖"为原则交付，规避云端部署的账号/白名单复杂度。</p>
+<p>当前版本 <code>0.1.0</code>（Apache-2.0）已具备可运行形态：后端 Rust（axum）编译产物 <code>option-workstation.exe</code> 于 2026-08-24 在本机编译成功，前端 UI 可正常渲染，长桥 OAuth 本地模式连通。</p>
+<h2 id="2">2. 项目目标</h2>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>说明</th>
+<th>度量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G1 本地可运行</td>
+<td>双击脚本即可在 Windows 本机启动完整服务</td>
+<td><code>http://127.0.0.1:7311</code> 可访问、UI 渲染</td>
+</tr>
+<tr>
+<td>G2 实时行情接入</td>
+<td>通过 Longbridge OpenAPI 拉取正股与期权行情</td>
+<td>正股报价+期权链可见；期权报价需 OPRA(OpenAPI) 权限</td>
+</tr>
+<tr>
+<td>G3 分析与建模</td>
+<td>期权链（希腊字母）、波动率曲面（SVI/SVF）、多腿策略分析</td>
+<td>各面板可出图/出数</td>
+</tr>
+<tr>
+<td>G4 研究可追溯</td>
+<td>审计台账 append-only 记录分析动作</td>
+<td>研究动作可回查</td>
+</tr>
+<tr>
+<td>G5 源码受控</td>
+<td>全量代码 GitHub 管理（main 本地 / cloud 云端）</td>
+<td>双分支可追踪</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3">3. 项目范围</h2>
+<h3 id="31-in-scope">3.1 范围内（In Scope）</h3>
+<ul>
+<li>本地 Windows 部署（MinGW GNU 工具链 + Rust）。</li>
+<li>双模式：历史回放（replay）+ 实时（live）。</li>
+<li>功能：期权链与希腊字母、波动率曲面（2D 热力图 / 3D SVI·SVF）、SVI 微笑拟合、多腿策略工作台与分析、审计台账、实时 WebSocket 流、Longbridge OAuth 2.0。</li>
+<li>行情源：Longbridge OpenAPI（正股 <code>SubFlags::QUOTE</code>、期权 <code>SubFlags::DEPTH</code>）。</li>
+<li>代码托管：GitHub（<code>GuoKYu/Option-Workstation-Local</code>）。</li>
+</ul>
+<h3 id="32-out-of-scope">3.2 范围外（Out of Scope，本期）</h3>
+<ul>
+<li>云端公网部署（保留 <code>cloud</code> 分支与 <code>DEPLOY-CLOUD.md</code>，暂不在本期交付）。</li>
+<li>实盘交易（Trade API 当前不可用，仅预留接口/模拟单）。</li>
+<li>多资产类别（仅美股期权 + 对应正股）。</li>
+<li>多用户/权限体系（单机单用户）。</li>
+</ul>
+<h2 id="4">4. 干系人</h2>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>产品/工程负责人（Su / GuoKYu）</td>
+<td>需求、架构、部署、文档、GitHub 管理</td>
+</tr>
+<tr>
+<td>行情供应商</td>
+<td>Longbridge OpenAPI 提供数据与 OAuth</td>
+</tr>
+<tr>
+<td>终端用户</td>
+<td>期权研究者、量化爱好者（单机使用）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5">5. 关键里程碑</h2>
+<table>
+<thead>
+<tr>
+<th>里程碑</th>
+<th>状态</th>
+<th>日期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1 环境就绪（MinGW GNU + Rust）</td>
+<td>✅ 完成</td>
+<td>2026-08-24</td>
+</tr>
+<tr>
+<td>M2 后端编译成功、UI 可渲染</td>
+<td>✅ 完成</td>
+<td>2026-08-24</td>
+</tr>
+<tr>
+<td>M3 GitHub 双分支推送（main/cloud）</td>
+<td>✅ 完成</td>
+<td>2026-08-24</td>
+</tr>
+<tr>
+<td>M4 操作手册 + 配套文档包</td>
+<td>✅ 完成</td>
+<td>2026-08-24</td>
+</tr>
+<tr>
+<td>M5 开通 OPRA(OpenAPI) 行情权限</td>
+<td>⏳ 待用户操作</td>
+<td>待定</td>
+</tr>
+<tr>
+<td>M6 期权实时报价贯通（端到端验证）</td>
+<td>⏳ 待 M5</td>
+<td>待定</td>
+</tr>
+<tr>
+<td>M7 功能打磨与测试验收</td>
+<td>⏳ 规划中</td>
+<td>待定</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6">6. 资源</h2>
+<ul>
+<li><strong>计算</strong>：本机 Windows 10/11，MinGW-w64 + Rust（GNU）。</li>
+<li><strong>网络</strong>：crates.io（编译期，必要时手机热点）、Longbridge CN 节点。</li>
+<li><strong>账号</strong>：Longbridge OpenAPI（需 OPRA(OpenAPI) 行情权限）。</li>
+<li><strong>代码托管</strong>：GitHub（SSH 443）。</li>
+</ul>
+<h2 id="7">7. 高层风险（详见风险登记册）</h2>
+<ul>
+<li>R1 期权行情权限缺失（OPRA OpenAPI）→ 期权无报价（<strong>当前已确认根因</strong>）。</li>
+<li>R2 受限网络导致编译/依赖下载困难（GitHub/微软/部分镜像被封）。</li>
+<li>R3 65s 期权请求全局冷却可能频繁触发排队提示。</li>
+<li>R4 Trade API 不可用，交易/模拟单功能暂挂。</li>
+</ul>
+<h2 id="8">8. 成功标准</h2>
+<ol>
+<li>本机一键启动、UI 全面板正常。</li>
+<li>开通 OPRA(OpenAPI) 后，期权链/曲面/策略台端到端出数出图。</li>
+<li>全套配套文档（本包）齐备并通过评审。</li>
+<li>代码双分支受控、可追溯。</li>
+</ol>
+<hr />
+<p><em>本章程为项目高层授权文件，详细需求见 <code>02-需求规格说明书.md</code>，进度见 <code>05-项目计划.md</code>。</em></p></section>
+<section class="doc" id="doc-2"><h1 id="optionworkstation-srs">OptionWorkstation 需求规格说明书（SRS）</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24 ｜ 对应版本：app v0.1.0
+追溯：功能需求编号 FR-xx 在 <code>06-需求跟踪矩阵.md</code> 跟踪；验收见 <code>09-验收标准.md</code></p>
+</blockquote>
+<hr />
+<h2 id="1">1. 引言</h2>
+<h3 id="11">1.1 目的</h3>
+<p>定义 OptionWorkstation 的功能性与非功能性需求，作为设计、开发、测试与验收的基线。</p>
+<h3 id="12">1.2 范围</h3>
+<p>本地部署的美股期权分析工作站，包含历史回放与实时两种工作模式，覆盖行情接入、期权链、波动率曲面、策略分析、审计台账、OAuth 鉴权与交易接口（预留）。</p>
+<h3 id="13">1.3 术语</h3>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SVI / SVF</td>
+<td>随机波动率隐含（Stochastic Volatility Inspired / Smile Fit）波动率建模方法</td>
+</tr>
+<tr>
+<td>希腊字母（Greeks）</td>
+<td>Delta/Gamma/Vega/Theta/Rho 等期权风险指标</td>
+</tr>
+<tr>
+<td>OPRA</td>
+<td>US Options 行情数据源；OpenAPI 权限需单独开通</td>
+</tr>
+<tr>
+<td>replay / live</td>
+<td>历史回放模式 / 实时模式</td>
+</tr>
+<tr>
+<td>审计台账</td>
+<td>append-only 的本地研究动作记录（<code>.option-workstation/audit.jsonl</code>）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="14">1.4 参考文档</h3>
+<p><code>操作手册.md</code>、<code>03-架构设计说明书.md</code>、<code>04-接口设计说明书.md</code>、Longbridge OpenAPI 文档。</p>
+<hr />
+<h2 id="2">2. 总体描述</h2>
+<h3 id="21">2.1 产品前景</h3>
+<p>单机运行，浏览器访问 <code>http://127.0.0.1:7311</code>。用户通过 Longbridge OAuth 登录后，可切 replay/live 模式，进行期权研究与策略分析。</p>
+<h3 id="22">2.2 用户特征</h3>
+<p>具备期权基础知识的个人研究者/量化爱好者，单机使用，无多用户协作需求。</p>
+<h3 id="23">2.3 运行环境约束</h3>
+<ul>
+<li>操作系统：Windows 10/11（64 位）。</li>
+<li>运行时：已编译 <code>option-workstation.exe</code>（约 20MB）+ 静态前端 <code>frontend/dist</code>。</li>
+<li>网络：Longbridge OpenAPI（CN 节点 <code>openapi.longbridge.cn</code>）；OAuth 回调 <code>http://localhost:60355/callback</code>（本地模式，无需长桥白名单）。</li>
+<li>依赖权限：LV1 实时行情(OpenAPI) + <strong>OPRA 美股期权行情(OpenAPI)</strong>。</li>
+</ul>
+<h3 id="24">2.4 假设与依赖</h3>
+<ul>
+<li>A1：用户持有有效 Longbridge OpenAPI 账号并开通相应行情权限。</li>
+<li>A2：本机已安装 MinGW GNU 工具链与 Rust（GNU），详见 <code>操作手册.md</code> 第 3 节。</li>
+<li>A3：编译期可访问 crates.io（受限网络下可用手机热点）。</li>
+</ul>
+<hr />
+<h2 id="3">3. 功能需求</h2>
+<h3 id="31">3.1 行情接入与鉴权</h3>
+<ul>
+<li><strong>FR-01 长桥 OAuth 登录</strong>：用户通过 OAuth 2.0 登录，本地模式回调 <code>localhost:60355</code>，无需配置白名单。<code>/api/oauth/start</code>、<code>/api/oauth/callback</code>、<code>/api/oauth/status</code>。</li>
+<li><strong>FR-02 连接状态管理</strong>：展示账号、行情协议、Trade API 状态、权限包；支持"更换并验证凭证"刷新 token。<code>/api/connection</code>、<code>/api/debug/connectivity</code>。</li>
+<li><strong>FR-03 正股行情</strong>：订阅正股 <code>SubFlags::QUOTE</code>，实时推送报价。</li>
+<li><strong>FR-04 期权行情</strong>：订阅期权 <code>SubFlags::DEPTH</code>（期权链/深度）；<strong>依赖 OPRA(OpenAPI) 权限</strong>，缺失时订阅通过但不推数据（见 R1）。</li>
+</ul>
+<h3 id="32">3.2 期权链与希腊字母</h3>
+<ul>
+<li><strong>FR-05 期权链查询</strong>：按标的+到期列出合约与行权价、买卖盘、IV、希腊字母。<code>/api/chain</code>。</li>
+<li><strong>FR-06 希腊字母计算</strong>：对每行合约计算 IV（求解或取 SDK IV，约束 1%~400%）、及 Greeks。<code>analytics.rs</code>。</li>
+<li><strong>FR-07 合约表格渲染</strong>：前端 <code>ChainTable.jsx</code> 展示链；支持按到期/行权价筛选。</li>
+</ul>
+<h3 id="33">3.3 波动率曲面</h3>
+<ul>
+<li><strong>FR-08 波动率上下文</strong>：返回微笑/曲面上下文数据。<code>/api/volatility-context</code>、<code>/api/live/volatility-context</code>。</li>
+<li><strong>FR-09 2D 热力图</strong>：以 Moneyness × DTE 渲染 IV 热力图（echarts heatmap）。<code>SurfaceChart.jsx</code>。</li>
+<li><strong>FR-10 3D 曲面</strong>：以 WebGL（echarts-gl <code>surface</code>）渲染 IV 三维曲面；无 WebGL 时降级为 2D。</li>
+<li><strong>FR-11 SVI/SVF 拟合</strong>：对微笑进行 SVI 拟合并叠加曲线。<code>volatility.rs</code>、<code>strategy.rs</code>/前端 SVI 曲线。</li>
+</ul>
+<h3 id="34">3.4 历史回放</h3>
+<ul>
+<li><strong>FR-12 replay 模式</strong>：选择交易日/标的，按分钟回放快照，驱动曲面与策略分析。<code>/api/replay/snapshot</code>、<code>/api/v1/replay/snapshot</code>。</li>
+<li><strong>FR-13 回放控制</strong>：播放/暂停/拖拽时间轴（前端状态机）。</li>
+</ul>
+<h3 id="35">3.5 实时模式</h3>
+<ul>
+<li><strong>FR-14 live 会话</strong>：建立实时会话、订阅、快照与 WebSocket 流。<code>/api/live/session</code>、<code>/api/live/snapshot</code>、<code>/api/live/stream</code>。</li>
+<li><strong>FR-15 实时限频保护</strong>：期权请求 65s 全局冷却（<code>live.rs:47</code>），触发时前端排队提示并自动重试（无害）。</li>
+</ul>
+<h3 id="36">3.6 多腿策略工作台</h3>
+<ul>
+<li><strong>FR-16 策略 legs 编辑</strong>：增删腿、设置数量/方向。<code>StrategyWorkbench.jsx</code>、<code>strategy_quantity</code> 等状态。</li>
+<li><strong>FR-17 策略分析</strong>：调用 <code>/api/strategy/analyze</code> 返回损益、聚合 Greeks、盈亏平衡点等。</li>
+</ul>
+<h3 id="37">3.7 审计与研究台账</h3>
+<ul>
+<li><strong>FR-18 审计记录</strong>：append-only 本地台账记录研究动作；支持查询与追加。<code>/api/audit/records</code>（GET/POST）、<code>/api/audit/records/{id}</code>。<code>AuditPanel.jsx</code>、<code>audit.rs</code>。</li>
+</ul>
+<h3 id="38">3.8 交易（预留）</h3>
+<ul>
+<li><strong>FR-19 账户与订单接口</strong>：<code>/api/trade/account</code>、<code>/api/trade/orders</code>（GET/POST）、<code>/api/trade/orders/{order_id}</code>。当前 Trade API 不可用（Unavailable），模拟单锁定，仅预留。</li>
+</ul>
+<h3 id="39">3.9 系统</h3>
+<ul>
+<li><strong>FR-20 健康检查与目录</strong>：<code>/api/health</code>、<code>/api/catalog</code>、<code>/api/session</code>。</li>
+<li><strong>FR-21 本地配置</strong>：通过 <code>.env</code> 配置端口、数据根、无风险利率、前端目录、审计路径。</li>
+</ul>
+<hr />
+<h2 id="4">4. 非功能需求</h2>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>需求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>性能(NF-01)</td>
+<td>实时快照刷新间隔可控（前端 2s 节流 <code>surfaceUpdateRef</code>）；回放快照请求可取消（AbortController）。</td>
+</tr>
+<tr>
+<td>可用性(NF-02)</td>
+<td>限频/无报价提示不阻塞行情流；失败有可理解的中文提示。</td>
+</tr>
+<tr>
+<td>安全(NF-03)</td>
+<td>OAuth token 本地存储；仅本机 127.0.0.1 监听；不暴露公网。</td>
+</tr>
+<tr>
+<td>兼容性(NF-04)</td>
+<td>前端 React 19 + echarts 6；无 WebGL 自动降级。</td>
+</tr>
+<tr>
+<td>可维护性(NF-05)</td>
+<td>后端按模块划分（analytics/audit/live/models/replay/strategy/volatility）；Rust 2024 edition。</td>
+</tr>
+<tr>
+<td>可移植(NF-06)</td>
+<td>本地模式零白名单；云端分支独立配置。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5">5. 数据需求</h2>
+<ul>
+<li>行情数据：来自 Longbridge（不 bundled）；正股 quote、期权 depth、期权链（L1 免费）。</li>
+<li>回放数据：本地 <code>./data</code> 目录（Parquet，<code>parquet</code> crate + zstd）。</li>
+<li>审计数据：<code>.option-workstation/audit.jsonl</code>（append-only）。</li>
+<li>配置：<code>.env</code>（见 <code>操作手册.md</code> 第 4 节）。</li>
+</ul>
+<h2 id="6">6. 接口需求</h2>
+<ul>
+<li>REST：<code>/api/*</code>（见 <code>04-接口设计说明书.md</code>）。</li>
+<li>WebSocket：<code>/api/live/stream</code> 实时行情流。</li>
+<li>外部：Longbridge OpenAPI（行情/交易/OAuth）。</li>
+</ul>
+<h2 id="7">7. 验收</h2>
+<p>逐条对照 <code>09-验收标准.md</code>；功能需求覆盖度见 <code>06-需求跟踪矩阵.md</code>。</p></section>
+<section class="doc" id="doc-3"><h1 id="optionworkstation">OptionWorkstation 架构设计说明书</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24 ｜ 对应版本：app v0.1.0</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 架构总览</h2>
+<p>OptionWorkstation 采用<strong>单进程单体架构</strong>：Rust（axum）后端同时承担 REST/WebSocket 服务、行情接入、分析计算与静态前端托管；React 单页应用（编译为 <code>frontend/dist</code>）由后端直接托管，浏览器访问 <code>http://127.0.0.1:7311</code>。</p>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w"> </span><span class="nx">Browser</span><span class="w">  </span><span class="nx">http</span><span class="p">:</span><span class="c1">//127.0.0.1:7311               │</span>
+<span class="err">│</span><span class="w">   </span><span class="nx">React</span><span class="w"> </span><span class="mi">19</span><span class="w"> </span><span class="nx">SPA</span><span class="w"> </span><span class="p">(</span><span class="nx">echarts</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">echarts</span><span class="o">-</span><span class="nx">gl</span><span class="p">)</span><span class="w">        </span><span class="err">│</span>
+<span class="err">└───────────────┬─────────────────────────────┘</span>
+<span class="w">                </span><span class="err">│</span><span class="w">  </span><span class="nx">REST</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">WebSocket</span>
+<span class="err">┌───────────────▼─────────────────────────────┐</span>
+<span class="err">│</span><span class="w"> </span><span class="nx">option</span><span class="o">-</span><span class="nx">workstation</span><span class="p">.</span><span class="nx">exe</span><span class="w"> </span><span class="p">(</span><span class="nx">Rust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">axum</span><span class="w"> </span><span class="m m-Double">0.8</span><span class="p">)</span><span class="w">     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">┌───────────────────────────────────────┐</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nx">main</span><span class="p">.</span><span class="nx">rs</span><span class="w">  </span><span class="nx">Router</span><span class="w"> </span><span class="p">(</span><span class="o">/</span><span class="kn">api</span><span class="o">/*</span><span class="p">,</span><span class="w"> </span><span class="o">/</span><span class="kn">api</span><span class="o">/</span><span class="nx">live</span><span class="o">/</span><span class="nx">stream</span><span class="p">)</span><span class="err">│</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├────────────┬────────────┬─────────────┤</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nx">live</span><span class="p">.</span><span class="nx">rs</span><span class="w">    </span><span class="err">│</span><span class="w"> </span><span class="nx">analytics</span><span class="p">.</span><span class="nx">rs</span><span class="err">│</span><span class="w"> </span><span class="nx">volatility</span><span class="p">.</span><span class="nx">rs</span><span class="err">│</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="p">(</span><span class="nx">Longbridge</span><span class="err">│</span><span class="w"> </span><span class="p">(</span><span class="nx">chain</span><span class="o">/</span><span class="w">     </span><span class="err">│</span><span class="w"> </span><span class="p">(</span><span class="nx">SVI</span><span class="o">/</span><span class="nx">SVF</span><span class="w">     </span><span class="err">│</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">  </span><span class="nx">OAuth</span><span class="o">/</span><span class="w">    </span><span class="err">│</span><span class="w">  </span><span class="nx">greeks</span><span class="o">/</span><span class="nx">IV</span><span class="p">)</span><span class="w"> </span><span class="err">│</span><span class="w">  </span><span class="nx">fit</span><span class="p">)</span><span class="w">        </span><span class="err">│</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">  </span><span class="nx">sub</span><span class="o">/</span><span class="nx">cool</span><span class="p">)</span><span class="w"> </span><span class="err">│</span><span class="w">             </span><span class="err">│</span><span class="w">              </span><span class="err">│</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├────────────┼────────────┼─────────────┤</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nx">strategy</span><span class="p">.</span><span class="nx">rs</span><span class="err">│</span><span class="w"> </span><span class="nx">replay</span><span class="p">.</span><span class="nx">rs</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nx">models</span><span class="p">.</span><span class="nx">rs</span><span class="w">    </span><span class="err">│</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="p">(</span><span class="nx">multi</span><span class="o">-</span><span class="nx">leg</span><span class="p">)</span><span class="err">│</span><span class="w"> </span><span class="p">(</span><span class="nx">parquet</span><span class="w">    </span><span class="err">│</span><span class="w"> </span><span class="p">(</span><span class="nx">shared</span><span class="w">      </span><span class="err">│</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">            </span><span class="err">│</span><span class="w">  </span><span class="nx">replay</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w">  </span><span class="nx">types</span><span class="p">)</span><span class="w">      </span><span class="err">│</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├────────────┴────────────┴─────────────┤</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nx">audit</span><span class="p">.</span><span class="nx">rs</span><span class="w"> </span><span class="p">(</span><span class="nx">append</span><span class="o">-</span><span class="nx">only</span><span class="w"> </span><span class="nx">ledger</span><span class="p">)</span><span class="w">          </span><span class="err">│</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└───────────────────────────────────────┘</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">外部</span><span class="err">：</span><span class="nx">Longbridge</span><span class="w"> </span><span class="nx">OpenAPI</span><span class="w"> </span><span class="p">(</span><span class="nx">CN</span><span class="w"> </span><span class="nx">node</span><span class="p">)</span><span class="w">          </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<h2 id="2">2. 技术栈</h2>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>技术</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>后端语言</td>
+<td>Rust（edition 2024）</td>
+</tr>
+<tr>
+<td>Web 框架</td>
+<td>axum 0.8.9（含 ws）</td>
+</tr>
+<tr>
+<td>异步运行时</td>
+<td>tokio 1.47（multi-thread）</td>
+</tr>
+<tr>
+<td>行情 SDK</td>
+<td>longbridge 4.4.1</td>
+</tr>
+<tr>
+<td>存储/列式</td>
+<td>parquet 59.1（zstd）、arrow-array</td>
+</tr>
+<tr>
+<td>统计/数值</td>
+<td>statrs 0.18、rust_decimal 1.39</td>
+</tr>
+<tr>
+<td>缓存</td>
+<td>moka 0.12（sync）、dashmap 6.1</td>
+</tr>
+<tr>
+<td>时间</td>
+<td>chrono 0.4、chrono-tz 0.10、time 0.3</td>
+</tr>
+<tr>
+<td>前端</td>
+<td>React 19、echarts 6、echarts-gl 2、lucide-react、vite 7</td>
+</tr>
+<tr>
+<td>日志</td>
+<td>tracing / tracing-subscriber</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3">3. 模块职责</h2>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main.rs</code></td>
+<td>路由装配、AppState、静态托管、错误处理</td>
+</tr>
+<tr>
+<td><code>live.rs</code></td>
+<td>Longbridge 接入：OAuth、订阅（正股 QUOTE / 期权 DEPTH）、65s 期权冷却（<code>OPTION_REQUEST_COOLDOWN</code>，live.rs:47）、90s 后台刷新、实时快照、<code>/api/live/stream</code></td>
+</tr>
+<tr>
+<td><code>analytics.rs</code></td>
+<td>期权链构建 <code>build_chain</code>、IV/希腊字母计算、<code>no usable quotes</code> 判定（analytics.rs:648）</td>
+</tr>
+<tr>
+<td><code>volatility.rs</code></td>
+<td>波动率上下文、SVI/SVF 微笑与曲面拟合</td>
+</tr>
+<tr>
+<td><code>strategy.rs</code></td>
+<td>多腿策略损益/聚合 Greeks/盈亏平衡分析</td>
+</tr>
+<tr>
+<td><code>replay.rs</code></td>
+<td>历史回放快照（读 Parquet <code>./data</code>）</td>
+</tr>
+<tr>
+<td><code>models.rs</code></td>
+<td>共享数据模型/类型</td>
+</tr>
+<tr>
+<td><code>audit.rs</code></td>
+<td>审计台账（append-only JSONL）读写</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4">4. 关键数据流</h2>
+<h3 id="41-oauth">4.1 OAuth 登录（本地模式）</h3>
+<p><code>/api/oauth/start</code> → 浏览器跳转长桥授权 → 回调 <code>http://localhost:60355/callback</code> → <code>/api/oauth/callback</code> 换 token → 本地保存 → <code>/api/oauth/status</code> 反映状态。</p>
+<h3 id="42">4.2 实时快照</h3>
+<p><code>/api/live/session</code>（建会话/订阅）→ 后台 <code>live.rs</code> 拉行情写入 <code>cache.depth</code> → <code>/api/live/snapshot</code> 出快照 → <code>/api/live/stream</code>（WebSocket）持续推送 → 前端节流（2s）更新曲面。</p>
+<h3 id="43">4.3 历史回放</h3>
+<p>前端选交易日/标的 → <code>/api/v1/replay/snapshot?...</code> → <code>replay.rs</code> 读 Parquet → 返回曲面/波动率上下文 → AbortController 取消过期请求。</p>
+<h3 id="44">4.4 策略分析</h3>
+<p>前端 <code>StrategyWorkbench</code> 组装 legs → <code>POST /api/strategy/analyze</code> → <code>strategy.rs</code> 计算 → 返回损益/聚合 Greeks。</p>
+<h2 id="5">5. 关键设计决策</h2>
+<ul>
+<li><strong>本地模式免白名单</strong>：OAuth 回调用 <code>localhost:60355</code>，区别于云端 <code>OW_OAUTH_REDIRECT_BASE</code>（cloud 分支）。</li>
+<li><strong>期权请求 65s 全局冷却</strong>：<code>live.rs:47</code>，避免触发长桥 301607 限频；单全局时间戳（非按标的分），见风险 R3。</li>
+<li><strong>OPRA 权限分离</strong>：正股（QUOTE）与期权（DEPTH/OPRA OpenAPI）是两套独立权限，缺期权权限时订阅通过但不推数据。</li>
+<li><strong>前端节流与取消</strong>：曲面更新 2s 节流（<code>surfaceUpdateRef</code>）、回放请求 AbortController，避免抖动。</li>
+<li><strong>编译工具链 GNU</strong>：因受限网络屏蔽微软域名，采用 MinGW-w64 GCC + <code>stable-x86_64-pc-windows-gnu</code>，规避 MSVC <code>link.exe</code> 缺失。</li>
+</ul>
+<h2 id="6">6. 部署拓扑</h2>
+<ul>
+<li>单机：<code>127.0.0.1:7311</code>（Web）+ <code>localhost:60355</code>（OAuth 回调）。</li>
+<li>启动：<code>start.bat</code>（直接跑 exe）/ <code>build-local.bat</code>（编译+启动）。</li>
+<li>代码：<code>main</code>（本地主枝）/ <code>cloud</code>（云端分支）。</li>
+</ul>
+<h2 id="7">7. 质量属性</h2>
+<ul>
+<li><strong>可观测</strong>：<code>RUST_LOG</code> 分级日志（option_workstation / tower_http）。</li>
+<li><strong>容错</strong>：限频/无报价提示不阻断行情流；订阅失败回滚（<code>rollback_option_switch</code>）。</li>
+<li><strong>可移植</strong>：零白名单本地模式 + 独立云端配置。</li>
+</ul></section>
+<section class="doc" id="doc-4"><h1 id="optionworkstation">OptionWorkstation 接口设计说明书</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24 ｜ 对应版本：app v0.1.0
+说明：以下端点由 <code>rust-backend/src/main.rs</code> 路由装配，路径与行为以本机实测代码为准。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 通用约定</h2>
+<ul>
+<li>Base URL：<code>http://127.0.0.1:7311</code></li>
+<li>内容类型：请求/响应均为 <code>application/json</code>（除 WebSocket 与静态资源）。</li>
+<li>鉴权：Longbridge OAuth token 由后端持有（本地模式），前端不直接持密钥。</li>
+<li>错误：JSON <code>{ "error": "..." }</code>；期权限频返回 HTTP 429 + 字段 <code>option_retry_after_ms</code>。</li>
+</ul>
+<hr />
+<h2 id="2">2. 系统类</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/health</code></td>
+<td>健康检查</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/catalog</code></td>
+<td>标的可选目录</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/session</code></td>
+<td>当前会话信息</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3">3. 行情与数据</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+<th>关键参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/chain</code></td>
+<td>期权链（合约/行权价/IV/Greeks）</td>
+<td><code>symbol</code>, <code>expiration</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/surface</code></td>
+<td>波动率曲面数据</td>
+<td><code>symbol</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/volatility-context</code></td>
+<td>波动率上下文（微笑/曲面）</td>
+<td><code>symbol</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/replay/snapshot</code></td>
+<td>历史回放快照</td>
+<td><code>date</code>, <code>symbols</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/replay/snapshot</code></td>
+<td>回放快照（v1，前端主用）</td>
+<td><code>date</code>, <code>symbol</code>, <code>minute</code>, <code>expiration</code> 等</td>
+</tr>
+</tbody>
+</table>
+<p><strong>响应示例（surface，节选）</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;grid&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="err">mo</span><span class="kc">ne</span><span class="err">y</span><span class="kc">ness</span><span class="p">,</span><span class="w"> </span><span class="err">d</span><span class="kc">te</span><span class="p">,</span><span class="w"> </span><span class="err">iv</span><span class="p">],</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;points&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;moneyness&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.02</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;tte_days&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;iv&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">18.5</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2 id="4-longbridge">4. 连接与鉴权（Longbridge）</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/connection</code></td>
+<td>连接状态（账号/行情协议/Trade API/权限包）</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/connection</code></td>
+<td>连接 Longbridge（connect_longbridge）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/oauth/status</code></td>
+<td>OAuth 状态</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/oauth/start</code></td>
+<td>发起 OAuth（返回授权 URL）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/oauth/callback</code></td>
+<td>OAuth 回调（<code>localhost:60355/callback</code>）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/debug/connectivity</code></td>
+<td>连通性调试（CN/Global 节点）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-live">5. 实时模式（Live）</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+<th>关键参数/体</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/live/session</code></td>
+<td>建立实时会话/订阅</td>
+<td><code>{ symbol, max_contracts, surface_expiries, moneyness_window }</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/live/snapshot</code></td>
+<td>实时快照</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/live/volatility-context</code></td>
+<td>实时波动率上下文</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/live/stream</code></td>
+<td><strong>WebSocket</strong> 实时行情流</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>订阅逻辑（<code>live.rs</code>）：正股 <code>SubFlags::QUOTE</code>，期权 <code>SubFlags::DEPTH</code>；期权请求受 65s 全局冷却（live.rs:47）保护。</p>
+</blockquote>
+<hr />
+<h2 id="6">6. 策略分析</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+<th>请求体</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/api/strategy/analyze</code></td>
+<td>多腿策略损益/聚合 Greeks</td>
+<td><code>{ legs:[{type,strike,side,qty,...}], underlying, ... }</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7">7. 审计台账</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/audit/records</code></td>
+<td>查询审计记录</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/audit/records</code></td>
+<td>追加审计记录（append-only）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/audit/records/{id}</code></td>
+<td>单条记录详情</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-trade-api">8. 交易（预留，Trade API 当前不可用）</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/trade/account</code></td>
+<td>账户信息（Unavailable）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/trade/orders</code></td>
+<td>订单列表</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/trade/orders</code></td>
+<td>提交模拟单（Locked）</td>
+</tr>
+<tr>
+<td>GET/PUT/DELETE</td>
+<td><code>/api/trade/orders/{order_id}</code></td>
+<td>单笔订单查询/修改/撤单</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>当前长桥 Trade API 返回 <code>Unavailable</code>，模拟单锁定；接口保留供后续启用。</p>
+</blockquote>
+<hr />
+<h2 id="9-websocketapilivestream">9. WebSocket：<code>/api/live/stream</code></h2>
+<ul>
+<li>协议：ws / wss（本机 ws）。</li>
+<li>推送：实时 tick / 深度 / 快照增量。</li>
+<li>消费：前端建立连接后按 <code>surfaceUpdateRef</code> 2s 节流更新曲面与读数。</li>
+</ul>
+<hr />
+<h2 id="10">10. 前端 ↔ 后端约定</h2>
+<ul>
+<li>前端 SPA 由后端静态托管（<code>OPTION_WORKSTATION_FRONTEND_DIST=./frontend/dist</code>）。</li>
+<li>模式切换：URL <code>?mode=live|replay</code>；默认 replay。</li>
+<li>全局错误：前端捕获 429 → 限频排队提示并 <code>setTimeout</code> 自动重试（App.jsx:379）。</li>
+</ul></section>
+<section class="doc" id="doc-5"><h1 id="optionworkstation-project-plan">OptionWorkstation 项目计划（Project Plan）</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24 ｜ 编制：产品/工程负责人
+关联：项目章程 <code>01</code>、需求规格 <code>02</code>、风险登记册 <code>07</code></p>
+</blockquote>
+<hr />
+<h2 id="1">1. 项目目标回顾</h2>
+<p>本地部署美股期权分析工作站，已具备可运行形态（v0.1.0），本期重点补齐权限、文档与验收。</p>
+<h2 id="2-wbs">2. 工作分解结构（WBS）</h2>
+<div class="codehilite"><pre><span></span><code><span class="mf">1.</span><span class="w"> </span><span class="n">基础环境</span><span class="err">（</span><span class="n">已完成</span><span class="err">）</span>
+<span class="w">   </span><span class="mf">1.1</span><span class="w"> </span><span class="n">MinGW</span><span class="w"> </span><span class="n">GNU</span><span class="w"> </span><span class="n">工具链安装</span>
+<span class="w">   </span><span class="mf">1.2</span><span class="w"> </span><span class="n">Rust</span><span class="w"> </span><span class="p">(</span><span class="n">GNU</span><span class="p">)</span><span class="w"> </span><span class="n">工具链安装</span>
+<span class="w">   </span><span class="mf">1.3</span><span class="w"> </span><span class="n">依赖下载与首次编译</span><span class="err">（</span><span class="n">crates</span><span class="mf">.</span><span class="n">io</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">手机热点</span><span class="err">）</span>
+<span class="mf">2.</span><span class="w"> </span><span class="n">应用开发</span><span class="err">（</span><span class="n">已完成</span><span class="err">，</span><span class="n">v0</span><span class="mf">.1.0</span><span class="err">）</span>
+<span class="w">   </span><span class="mf">2.1</span><span class="w"> </span><span class="n">后端</span><span class="err">：</span><span class="n">行情接入</span><span class="p">(</span><span class="n">live</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">分析</span><span class="p">(</span><span class="n">analytics</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">波动率</span><span class="p">(</span><span class="n">volatility</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">策略</span><span class="p">(</span><span class="n">strategy</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">回放</span><span class="p">(</span><span class="n">replay</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">审计</span><span class="p">(</span><span class="n">audit</span><span class="p">)</span>
+<span class="w">   </span><span class="mf">2.2</span><span class="w"> </span><span class="n">前端</span><span class="err">：</span><span class="n">链</span><span class="o">/</span><span class="n">曲面</span><span class="o">/</span><span class="n">策略台</span><span class="o">/</span><span class="n">审计面板</span>
+<span class="w">   </span><span class="mf">2.3</span><span class="w"> </span><span class="n">OAuth</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">WebSocket</span>
+<span class="mf">3.</span><span class="w"> </span><span class="n">权限打通</span><span class="err">（</span><span class="n">进行中</span><span class="err">）</span>
+<span class="w">   </span><span class="mf">3.1</span><span class="w"> </span><span class="n">开通</span><span class="w"> </span><span class="n">OPRA</span><span class="p">(</span><span class="kr">Open</span><span class="n">API</span><span class="p">)</span><span class="w"> </span><span class="n">期权行情权限</span><span class="err">（</span><span class="n">用户侧</span><span class="err">）</span>
+<span class="w">   </span><span class="mf">3.2</span><span class="w"> </span><span class="n">端到端验证期权报价贯通</span><span class="err">（</span><span class="n">待</span><span class="w"> </span><span class="mf">3.1</span><span class="err">）</span>
+<span class="w">   </span><span class="mf">3.3</span><span class="w"> </span><span class="n">定位并解决</span><span class="w"> </span><span class="n">Trade</span><span class="w"> </span><span class="n">API</span><span class="w"> </span><span class="n">Unavailable</span><span class="err">（</span><span class="n">用户侧</span><span class="o">/</span><span class="n">待定</span><span class="err">）</span>
+<span class="mf">4.</span><span class="w"> </span><span class="n">配套文档</span><span class="err">（</span><span class="n">本期</span><span class="err">）</span>
+<span class="w">   </span><span class="mf">4.1</span><span class="w"> </span><span class="n">操作手册</span><span class="err">（</span><span class="n">完成</span><span class="w"> </span><span class="mf">08</span><span class="o">-</span><span class="mf">24</span><span class="err">）</span>
+<span class="w">   </span><span class="mf">4.2</span><span class="w"> </span><span class="n">项目文档包</span><span class="err">（</span><span class="n">章程</span><span class="o">/</span><span class="n">需求</span><span class="o">/</span><span class="n">架构</span><span class="o">/</span><span class="n">接口</span><span class="o">/</span><span class="n">计划</span><span class="o">/</span><span class="n">追踪</span><span class="o">/</span><span class="n">风险</span><span class="o">/</span><span class="n">测试</span><span class="o">/</span><span class="n">验收</span><span class="o">/</span><span class="n">配置</span><span class="o">/</span><span class="kr">READ</span><span class="n">ME</span><span class="err">）</span>
+<span class="mf">5.</span><span class="w"> </span><span class="n">测试与验收</span><span class="err">（</span><span class="n">待排</span><span class="err">）</span>
+<span class="w">   </span><span class="mf">5.1</span><span class="w"> </span><span class="n">单元</span><span class="o">/</span><span class="n">集成测试补齐</span>
+<span class="w">   </span><span class="mf">5.2</span><span class="w"> </span><span class="n">端到端验收</span><span class="err">（</span><span class="n">含权限贯通</span><span class="err">）</span>
+<span class="mf">6.</span><span class="w"> </span><span class="n">代码管理</span><span class="err">（</span><span class="n">持续</span><span class="err">）</span>
+<span class="w">   </span><span class="mf">6.1</span><span class="w"> </span><span class="n">GitHub</span><span class="w"> </span><span class="n">main</span><span class="o">/</span><span class="n">cloud</span><span class="w"> </span><span class="n">双分支维护</span>
+<span class="w">   </span><span class="mf">6.2</span><span class="w"> </span><span class="n">版本发布</span><span class="err">（</span><span class="n">语义化版本</span><span class="err">）</span>
+</code></pre></div>
+
+<h2 id="3">3. 里程碑与进度</h2>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>里程碑</th>
+<th>状态</th>
+<th>计划/实际</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1</td>
+<td>编译环境就绪</td>
+<td>✅</td>
+<td>2026-08-24</td>
+</tr>
+<tr>
+<td>M2</td>
+<td>应用可运行（后端编译+UI 渲染）</td>
+<td>✅</td>
+<td>2026-08-24</td>
+</tr>
+<tr>
+<td>M3</td>
+<td>GitHub 双分支推送</td>
+<td>✅</td>
+<td>2026-08-24</td>
+</tr>
+<tr>
+<td>M4</td>
+<td>操作手册 + 文档包</td>
+<td>✅</td>
+<td>2026-08-24</td>
+</tr>
+<tr>
+<td>M5</td>
+<td>OPRA(OpenAPI) 行情权限开通</td>
+<td>⏳ 用户操作</td>
+<td>待定</td>
+</tr>
+<tr>
+<td>M6</td>
+<td>期权实时报价端到端贯通</td>
+<td>⏳ 依赖 M5</td>
+<td>待定</td>
+</tr>
+<tr>
+<td>M7</td>
+<td>Trade API 可用性定位/解决</td>
+<td>⏳ 待定</td>
+<td>待定</td>
+</tr>
+<tr>
+<td>M8</td>
+<td>测试与验收通过</td>
+<td>⏳ 规划</td>
+<td>待定</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4">4. 关键路径</h2>
+<p>WBS 3.1（权限）→ 3.2（贯通）→ 5.2（验收）。<strong>关键路径阻塞在用户侧长桥权限开通</strong>。</p>
+<h2 id="5">5. 资源与责任</h2>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>人力</td>
+<td>1 名产品/工程负责人（兼开发、文档、部署）</td>
+</tr>
+<tr>
+<td>计算</td>
+<td>本机 Windows + MinGW/Rust</td>
+</tr>
+<tr>
+<td>外部</td>
+<td>Longbridge OpenAPI（行情+交易+OAuth）</td>
+</tr>
+<tr>
+<td>托管</td>
+<td>GitHub（SSH 443）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6">6. 进度跟踪方法</h2>
+<ul>
+<li>看板：任务清单（tasks）跟踪到文档级。</li>
+<li>文档：<code>06-需求跟踪矩阵.md</code> 追溯功能→文档→测试的覆盖。</li>
+<li>风险：<code>07-风险登记册.md</code> 周度复核。</li>
+</ul>
+<h2 id="7">7. 沟通计划</h2>
+<ul>
+<li>单人项目，通过本工具会话同步；关键决策写入仓库文档（Git 受控）。</li>
+</ul></section>
+<section class="doc" id="doc-6"><h1 id="optionworkstation-rtm">OptionWorkstation 需求跟踪矩阵（RTM）</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24
+FR = 功能需求（见 <code>02-需求规格说明书.md</code>）；NFR = 非功能需求</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>需求 ID</th>
+<th>需求描述</th>
+<th>来源文档</th>
+<th>设计文档</th>
+<th>接口/实现</th>
+<th>测试用例</th>
+<th>验收状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-01</td>
+<td>长桥 OAuth 登录（本地模式回调 localhost:60355）</td>
+<td>SRS 3.1</td>
+<td>架构 4.1</td>
+<td><code>/api/oauth/*</code>（live.rs）</td>
+<td>TC-01</td>
+<td>已实现（待验收）</td>
+</tr>
+<tr>
+<td>FR-02</td>
+<td>连接状态管理（账号/权限包/更换凭证）</td>
+<td>SRS 3.1</td>
+<td>架构 4.1</td>
+<td><code>/api/connection</code>、<code>/api/debug/connectivity</code></td>
+<td>TC-02</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-03</td>
+<td>正股行情（QUOTE）</td>
+<td>SRS 3.1</td>
+<td>架构 5</td>
+<td>live.rs</td>
+<td>TC-03</td>
+<td>已实现（股权限已确认）</td>
+</tr>
+<tr>
+<td>FR-04</td>
+<td>期权行情（DEPTH/OPRA）</td>
+<td>SRS 3.1</td>
+<td>架构 5</td>
+<td>live.rs:1023</td>
+<td>TC-04</td>
+<td><strong>阻塞：缺 OPRA(OpenAPI)</strong></td>
+</tr>
+<tr>
+<td>FR-05</td>
+<td>期权链查询</td>
+<td>SRS 3.2</td>
+<td>架构 3</td>
+<td><code>/api/chain</code>、analytics.rs</td>
+<td>TC-05</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-06</td>
+<td>希腊字母/IV 计算</td>
+<td>SRS 3.2</td>
+<td>架构 3</td>
+<td>analytics.rs</td>
+<td>TC-06</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-07</td>
+<td>合约表格渲染</td>
+<td>SRS 3.2</td>
+<td>—</td>
+<td>ChainTable.jsx</td>
+<td>TC-07</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-08</td>
+<td>波动率上下文</td>
+<td>SRS 3.3</td>
+<td>架构 3</td>
+<td><code>/api/volatility-context</code></td>
+<td>TC-08</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-09</td>
+<td>2D 热力图</td>
+<td>SRS 3.3</td>
+<td>架构 4.3</td>
+<td>SurfaceChart.jsx</td>
+<td>TC-09</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-10</td>
+<td>3D 曲面（WebGL 降级）</td>
+<td>SRS 3.3</td>
+<td>架构 4.3</td>
+<td>echarts-gl</td>
+<td>TC-10</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-11</td>
+<td>SVI/SVF 拟合</td>
+<td>SRS 3.3</td>
+<td>架构 3</td>
+<td>volatility.rs</td>
+<td>TC-11</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-12</td>
+<td>replay 回放快照</td>
+<td>SRS 3.4</td>
+<td>架构 4.2</td>
+<td><code>/api/v1/replay/snapshot</code>、replay.rs</td>
+<td>TC-12</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-13</td>
+<td>回放控制（播放/拖拽）</td>
+<td>SRS 3.4</td>
+<td>—</td>
+<td>App.jsx</td>
+<td>TC-13</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-14</td>
+<td>live 会话/流</td>
+<td>SRS 3.5</td>
+<td>架构 4.2</td>
+<td><code>/api/live/*</code>、<code>/api/live/stream</code></td>
+<td>TC-14</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-15</td>
+<td>实时限频保护（65s 冷却）</td>
+<td>SRS 3.5</td>
+<td>架构 5</td>
+<td>live.rs:47</td>
+<td>TC-15</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-16</td>
+<td>多腿策略编辑</td>
+<td>SRS 3.6</td>
+<td>架构 4.4</td>
+<td>StrategyWorkbench.jsx</td>
+<td>TC-16</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-17</td>
+<td>策略分析</td>
+<td>SRS 3.6</td>
+<td>架构 3</td>
+<td><code>/api/strategy/analyze</code>、strategy.rs</td>
+<td>TC-17</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-18</td>
+<td>审计台账（append-only）</td>
+<td>SRS 3.7</td>
+<td>架构 3</td>
+<td><code>/api/audit/records</code>、audit.rs</td>
+<td>TC-18</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-19</td>
+<td>交易账户/订单接口（预留）</td>
+<td>SRS 3.8</td>
+<td>架构 5</td>
+<td><code>/api/trade/*</code>、live.rs:301</td>
+<td>TC-19</td>
+<td><strong>Trade API 不可用</strong>（见 R4）</td>
+</tr>
+<tr>
+<td>FR-20</td>
+<td>健康检查/目录</td>
+<td>SRS 3.9</td>
+<td>架构 2</td>
+<td><code>/api/health</code>、<code>/api/catalog</code></td>
+<td>TC-20</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>FR-21</td>
+<td>本地配置（.env）</td>
+<td>SRS 3.9</td>
+<td>架构 6</td>
+<td><code>.env</code></td>
+<td>TC-21</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>NFR-01</td>
+<td>前端节流/请求取消</td>
+<td>SRS 4</td>
+<td>架构 4.2/4.3</td>
+<td>surfaceUpdateRef/AbortController</td>
+<td>TC-N1</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>NFR-02</td>
+<td>失败提示不阻塞行情流</td>
+<td>SRS 4</td>
+<td>架构 5</td>
+<td>App.jsx 429 处理</td>
+<td>TC-N2</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>NFR-03</td>
+<td>仅本机监听、token 本地</td>
+<td>SRS 4</td>
+<td>架构 6</td>
+<td>127.0.0.1、process_memory_only</td>
+<td>TC-N3</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>NFR-04</td>
+<td>无 WebGL 降级</td>
+<td>SRS 4</td>
+<td>架构 4.3</td>
+<td>SurfaceChart.jsx</td>
+<td>TC-N4</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>NFR-05</td>
+<td>模块化后端</td>
+<td>SRS 4</td>
+<td>架构 3</td>
+<td>8 模块</td>
+<td>TC-N5</td>
+<td>已实现</td>
+</tr>
+<tr>
+<td>NFR-06</td>
+<td>本地零白名单</td>
+<td>SRS 4</td>
+<td>架构 5</td>
+<td>localhost:60355</td>
+<td>TC-N6</td>
+<td>已实现</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>状态图例：已实现=代码存在；阻塞=依赖外部（权限）；待验收=未跑正式测试。</p>
+</blockquote></section>
+<section class="doc" id="doc-7"><h1 id="optionworkstation-risk-register">OptionWorkstation 风险登记册（Risk Register）</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24 ｜ 复核：周度
+关联：项目计划 <code>05</code>、需求跟踪矩阵 <code>06</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>风险</th>
+<th>类别</th>
+<th>可能性</th>
+<th>影响</th>
+<th>等级</th>
+<th>应对措施</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>缺 OPRA(OpenAPI) 期权行情权限，期权无报价</td>
+<td>外部依赖</td>
+<td>已发生</td>
+<td>高</td>
+<td><strong>高</strong></td>
+<td>去长桥 Quote Store 开通「OPRA 美股期权行情(OpenAPI)」后点「更换并验证凭证」</td>
+<td>待用户操作</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>受限网络（GitHub/微软/部分镜像被封）致编译/下载困难</td>
+<td>环境</td>
+<td>高</td>
+<td>中</td>
+<td>中</td>
+<td>用 MinGW(非微软源)+手机热点直连 crates.io；零自定义 cargo source</td>
+<td>已基本缓解</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>65s 期权请求全局冷却频繁触发排队提示</td>
+<td>设计</td>
+<td>中</td>
+<td>低</td>
+<td>低</td>
+<td>设计为按标的分冷却 / 隔离后台刷新（可选代码改进，未做）</td>
+<td>接受（无害）</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Trade API 不可用（Unavailable），交易/模拟单锁定</td>
+<td>外部依赖</td>
+<td>已发生</td>
+<td>中</td>
+<td><strong>高</strong></td>
+<td>检查 OAuth scope 含交易 + 账户开通 OpenAPI 交易；本版仅支持 paper 模拟单</td>
+<td>定位中</td>
+</tr>
+<tr>
+<td>R5</td>
+<td>期权链/曲面在数据稀疏到期月无解</td>
+<td>数据</td>
+<td>低</td>
+<td>低</td>
+<td>低</td>
+<td>切换近月/标准月度到期；提示为瞬态</td>
+<td>接受</td>
+</tr>
+<tr>
+<td>R6</td>
+<td>依赖版本漂移（longbridge 4.4.1 等）致编译失败</td>
+<td>技术</td>
+<td>中</td>
+<td>中</td>
+<td>中</td>
+<td>Cargo.lock 锁定；vendor 本地补丁（longbridge-oauth/dotenv/paste 已 patch）</td>
+<td>已缓解</td>
+</tr>
+<tr>
+<td>R7</td>
+<td>单机无备份，审计台账/数据丢失</td>
+<td>运维</td>
+<td>低</td>
+<td>中</td>
+<td>低</td>
+<td><code>.option-workstation/audit.jsonl</code> 与 <code>./data</code> 随 Git 外的本地备份；GitHub 仅存代码</td>
+<td>建议执行</td>
+</tr>
+<tr>
+<td>R8</td>
+<td>云端 cloud 分支配置遗漏致部署失败</td>
+<td>部署</td>
+<td>低</td>
+<td>低</td>
+<td>低</td>
+<td>独立 <code>.env.example</code> + <code>DEPLOY-CLOUD.md</code>；与 main 隔离</td>
+<td>已缓解</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_1">风险详情</h2>
+<h3 id="r1-r4">R1 / R4 根因对比（外部权限，最关键）</h3>
+<ul>
+<li><strong>R1 期权行情</strong>：权限包为「OPRA 美股期权行情 (OpenAPI)」，与 App/Web 同名项独立；缺则订阅通过不推数据 → <code>no usable quotes yet</code>。</li>
+<li><strong>R4 交易 API</strong>：<code>live.rs:752-764</code> 以 <code>us_asset_overview()</code>/<code>account_balance()</code> 是否返回决定是否 <code>trade_connected</code>；二者皆 None → <code>trade</code> 不入库 → 接口报 <code>trade permission is unavailable for this token</code>。根因多为 OAuth scope 不含交易，或账户未开通 OpenAPI 交易（与市场/下单权限是两套）。</li>
+</ul>
+<h3 id="r3">R3 设计权衡</h3>
+<p>当前 65s 冷却为<strong>单一全局时间戳</strong>（非按标的分），手动切换与 90s 后台刷新共享窗口。无害但提示频繁，可选改进：按 <code>symbol</code> 分 <code>HashMap</code>、或后台与手动独立时间戳。</p>
+<h2 id="_2">风险监控</h2>
+<ul>
+<li>周度复核上表；R1/R4 随用户权限开通状态更新。</li>
+<li>新增风险即时入册。</li>
+</ul></section>
+<section class="doc" id="doc-8"><h1 id="optionworkstation-stp">OptionWorkstation 测试计划与测试用例（STP）</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24 ｜ 关联：需求跟踪矩阵 <code>06</code>、验收标准 <code>09</code></p>
+</blockquote>
+<hr />
+<h2 id="1">1. 测试范围</h2>
+<ul>
+<li>覆盖 <code>02-需求规格说明书.md</code> 全部 FR / NFR。</li>
+<li>重点：行情权限（FR-04/R1）、交易 API（FR-19/R4）、限频保护（FR-15）、波动率曲面、策略分析、审计台账。</li>
+</ul>
+<h2 id="2">2. 测试类型</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单元测试</td>
+<td>数值/分析函数（IV、Greeks、SVI 拟合）</td>
+<td><code>cargo test</code>（approx）</td>
+</tr>
+<tr>
+<td>集成测试</td>
+<td>REST/WebSocket 端点</td>
+<td>curl / 前端 E2E</td>
+</tr>
+<tr>
+<td>端到端</td>
+<td>登录→订阅→曲面→策略→审计</td>
+<td>手动 + 脚本</td>
+</tr>
+<tr>
+<td>权限验证</td>
+<td>期权/交易权限真值探测</td>
+<td>Longbridge CLI</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3">3. 测试环境</h2>
+<ul>
+<li>Windows 10/11 + MinGW GNU + Rust (GNU)。</li>
+<li>Longbridge 账号：LV1(OpenAPI) + <strong>OPRA(OpenAPI)</strong>（R1 前置）。</li>
+<li>已知受限网络：crates.io 用手机热点；GitHub SSH 443。</li>
+</ul>
+<h2 id="4">4. 测试用例</h2>
+<h3 id="_1">功能测试</h3>
+<table>
+<thead>
+<tr>
+<th>用例</th>
+<th>对应需求</th>
+<th>步骤</th>
+<th>预期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TC-01 OAuth 登录</td>
+<td>FR-01</td>
+<td>点连接→授权→回调 localhost:60355</td>
+<td>状态 connected，显示账号尾号</td>
+</tr>
+<tr>
+<td>TC-02 连接状态</td>
+<td>FR-02</td>
+<td>查看连接面板与权限包列表</td>
+<td>正股权限✅；OPRA(OpenAPI) 状态正确</td>
+</tr>
+<tr>
+<td>TC-03 正股行情</td>
+<td>FR-03</td>
+<td>订阅 SPY</td>
+<td>报价持续推送</td>
+</tr>
+<tr>
+<td>TC-04 期权行情</td>
+<td>FR-04/R1</td>
+<td>订阅 SPY 期权链</td>
+<td><strong>需 OPRA(OpenAPI)</strong>；有权限后深度报价流入</td>
+</tr>
+<tr>
+<td>TC-05 期权链</td>
+<td>FR-05</td>
+<td><code>/api/chain?symbol=SPY</code></td>
+<td>返回各合约+IV+Greeks</td>
+</tr>
+<tr>
+<td>TC-06 Greeks/IV</td>
+<td>FR-06</td>
+<td>单合约核验 IV</td>
+<td>IV 落在 1%~400%</td>
+</tr>
+<tr>
+<td>TC-07 合约表格</td>
+<td>FR-07</td>
+<td>前端 ChainTable</td>
+<td>可筛选/排序</td>
+</tr>
+<tr>
+<td>TC-08 波动率上下文</td>
+<td>FR-08</td>
+<td><code>/api/volatility-context</code></td>
+<td>返回微笑/曲面上下文</td>
+</tr>
+<tr>
+<td>TC-09 2D 热力图</td>
+<td>FR-09</td>
+<td>查看曲面</td>
+<td>Moneyness×DTE 热力图渲染</td>
+</tr>
+<tr>
+<td>TC-10 3D 曲面</td>
+<td>FR-10</td>
+<td>有 WebGL 时</td>
+<td>echarts-gl 三维；无 WebGL 降级</td>
+</tr>
+<tr>
+<td>TC-11 SVI 拟合</td>
+<td>FR-11</td>
+<td>微笑曲线</td>
+<td>SVI 曲线叠加</td>
+</tr>
+<tr>
+<td>TC-12 回放</td>
+<td>FR-12</td>
+<td>replay 模式选日期</td>
+<td>快照返回曲面</td>
+</tr>
+<tr>
+<td>TC-13 回放控制</td>
+<td>FR-13</td>
+<td>播放/拖拽</td>
+<td>时间轴生效，请求可取消</td>
+</tr>
+<tr>
+<td>TC-14 实时会话/流</td>
+<td>FR-14</td>
+<td>live 模式</td>
+<td>会话建立，WS 流推送</td>
+</tr>
+<tr>
+<td>TC-15 限频保护</td>
+<td>FR-15</td>
+<td>65s 内重复请求期权</td>
+<td>排队提示，约 65s 后自动重试，行情不中断</td>
+</tr>
+<tr>
+<td>TC-16 策略编辑</td>
+<td>FR-16</td>
+<td>增删腿</td>
+<td>legs 状态更新</td>
+</tr>
+<tr>
+<td>TC-17 策略分析</td>
+<td>FR-17</td>
+<td>POST <code>/api/strategy/analyze</code></td>
+<td>返回损益/聚合 Greeks/盈亏平衡</td>
+</tr>
+<tr>
+<td>TC-18 审计台账</td>
+<td>FR-18</td>
+<td>追加/查询记录</td>
+<td>append-only 可回查</td>
+</tr>
+<tr>
+<td>TC-19 交易接口</td>
+<td>FR-19/R4</td>
+<td>GET <code>/api/trade/account</code></td>
+<td><strong>当前 Unavailable</strong>；R4 解决后返回账户</td>
+</tr>
+<tr>
+<td>TC-20 健康检查</td>
+<td>FR-20</td>
+<td>GET <code>/api/health</code></td>
+<td>200 + 状态</td>
+</tr>
+<tr>
+<td>TC-21 配置生效</td>
+<td>FR-21</td>
+<td>改端口重启</td>
+<td>新端口生效</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">非功能测试</h3>
+<table>
+<thead>
+<tr>
+<th>用例</th>
+<th>对应</th>
+<th>步骤</th>
+<th>预期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TC-N1 节流/取消</td>
+<td>NFR-01</td>
+<td>高频切换到期</td>
+<td>前端 2s 节流；过期请求被 AbortController 取消</td>
+</tr>
+<tr>
+<td>TC-N2 失败不阻断</td>
+<td>NFR-02</td>
+<td>断网时切到期</td>
+<td>提示可理解，行情流恢复后自愈</td>
+</tr>
+<tr>
+<td>TC-N3 本地安全</td>
+<td>NFR-03</td>
+<td>外部访问 7311</td>
+<td>仅本机；token 不落盘</td>
+</tr>
+<tr>
+<td>TC-N4 WebGL 降级</td>
+<td>NFR-04</td>
+<td>关闭 WebGL</td>
+<td>降级 2D 热力图</td>
+</tr>
+<tr>
+<td>TC-N5 模块化</td>
+<td>NFR-05</td>
+<td>代码审查</td>
+<td>8 模块职责清晰</td>
+</tr>
+<tr>
+<td>TC-N6 免白名单</td>
+<td>NFR-06</td>
+<td>换设备跑</td>
+<td>OAuth 用 localhost:60355 免白名单</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5">5. 准入/准出</h2>
+<ul>
+<li><strong>准入</strong>：代码编译通过（<code>build-local.bat</code>）。</li>
+<li><strong>准出</strong>：FR-04/FR-19 在权限就绪后用例通过；无 P0/P1 缺陷遗留。</li>
+<li><strong>已知阻塞</strong>：TC-04（R1）、TC-19（R4）依赖用户侧权限开通，列为「待外部条件」。</li>
+</ul>
+<h2 id="6">6. 缺陷等级</h2>
+<ul>
+<li>P0：核心功能不可用（如无法启动、曲面全空）</li>
+<li>P1：重要功能受限（如期权无报价）</li>
+<li>P2：体验问题（如提示文案）</li>
+</ul></section>
+<section class="doc" id="doc-9"><h1 id="optionworkstation-acceptance-criteria">OptionWorkstation 验收标准（Acceptance Criteria）</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24 ｜ 关联：需求跟踪矩阵 <code>06</code>、测试计划 <code>08</code></p>
+</blockquote>
+<hr />
+<h2 id="1">1. 验收原则</h2>
+<ul>
+<li>每条 FR/NFR 至少有一项可执行验收项。</li>
+<li>验收以「权限就绪后」为前置条件；外部依赖（R1/R4）未满足时明确标注「待外部条件」。</li>
+</ul>
+<h2 id="2">2. 验收清单</h2>
+<h3 id="_1">环境（前提）</h3>
+<ul>
+<li>[ ] A-01 本机 <code>start.bat</code> 启动，<code>http://127.0.0.1:7311</code> 可访问。</li>
+<li>[ ] A-02 浏览器渲染全部面板（链/曲面/策略台/审计）。</li>
+</ul>
+<h3 id="_2">鉴权与行情</h3>
+<ul>
+<li>[ ] A-03 OAuth 本地模式登录成功（回调 localhost:60355，免白名单）。</li>
+<li>[ ] A-04 正股行情持续推送（SPY 报价刷新）。</li>
+<li>[ ] <strong>A-05【待外部条件 R1】</strong> 开通 OPRA(OpenAPI) 后期权链/深度/IV 可见；界面不再长期"no usable quotes yet"。</li>
+</ul>
+<h3 id="_3">分析与建模</h3>
+<ul>
+<li>[ ] A-06 期权链与 Greeks 计算正确（抽样比对）。</li>
+<li>[ ] A-07 2D/3D 波动率曲面渲染正常；无 WebGL 自动降级。</li>
+<li>[ ] A-08 SVI 微笑拟合并叠加曲线。</li>
+<li>[ ] A-09 replay 回放按分钟驱动曲面。</li>
+<li>[ ] A-10 live 会话建立、WebSocket 流推送。</li>
+<li>[ ] A-11 65s 限频提示无害、到点自动重试、行情不中断。</li>
+</ul>
+<h3 id="_4">策略</h3>
+<ul>
+<li>[ ] A-12 多腿策略损益/聚合 Greeks/盈亏平衡计算合理。</li>
+</ul>
+<h3 id="_5">审计</h3>
+<ul>
+<li>[ ] A-13 审计台账追加/查询正确，append-only 不被篡改。</li>
+</ul>
+<h3 id="_6">交易（预留）</h3>
+<ul>
+<li>[ ] <strong>A-14【待外部条件 R4】</strong> Trade API 可用性定位/解决后，<code>/api/trade/account</code> 返回账户；模拟单（paper）可提交。</li>
+</ul>
+<h3 id="_7">非功能</h3>
+<ul>
+<li>[ ] A-15 失败提示可理解、行情流不阻断（断网恢复自愈）。</li>
+<li>[ ] A-16 仅本机监听，token 不落盘。</li>
+<li>[ ] A-17 前端高頻切换不抖动（节流/取消生效）。</li>
+</ul>
+<h2 id="3">3. 验收结论分级</h2>
+<ul>
+<li><strong>通过</strong>：A-01..A-04、A-06..A-13、A-15..A-17 全部满足。</li>
+<li><strong>有条件通过</strong>：A-05、A-14 待用户侧权限开通（R1/R4）后补充验收，不阻断主验收。</li>
+<li><strong>不通过</strong>：任一非外部依赖项失败。</li>
+</ul>
+<h2 id="4">4. 签署</h2>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>姓名</th>
+<th>日期</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>验收人（用户）</td>
+<td>—</td>
+<td>—</td>
+<td>待填</td>
+</tr>
+<tr>
+<td>交付人（工程）</td>
+<td>Su / GuoKYu</td>
+<td>2026-08-24</td>
+<td>文档齐备、功能就绪（受限于权限）</td>
+</tr>
+</tbody>
+</table></section>
+<section class="doc" id="doc-10"><h1 id="optionworkstation-cm-plan">OptionWorkstation 配置与版本管理计划（CM Plan）</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-24
+关联：操作手册 <code>操作手册.md</code>、项目计划 <code>05</code></p>
+</blockquote>
+<hr />
+<h2 id="1">1. 版本管理</h2>
+<h3 id="11">1.1 语义化版本</h3>
+<p>采用 <code>MAJOR.MINOR.PATCH</code>（当前 <code>0.1.0</code>）：
+- MAJOR：不兼容架构/接口变更
+- MINOR：新功能（向后兼容）
+- PATCH：修复/文档/配置</p>
+<h3 id="12-github-guokyuoption-workstation-local">1.2 分支策略（GitHub <code>GuoKYu/Option-Workstation-Local</code>）</h3>
+<table>
+<thead>
+<tr>
+<th>分支</th>
+<th>用途</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main</code></td>
+<td><strong>本地部署主枝</strong></td>
+<td>日常开发与本地运行版本</td>
+</tr>
+<tr>
+<td><code>cloud</code></td>
+<td>云端部署分支</td>
+<td>含 <code>OW_OAUTH_REDIRECT_BASE</code> 公网回调 + <code>DEPLOY-CLOUD.md</code>；与 main 隔离</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>推送：SSH over 443（<code>~/.ssh/config</code>：<code>HostName ssh.github.com Port 443</code>）。沙箱内可用；本机执行 <code>GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git push origin main</code>。</li>
+<li>建仓：GitHub MCP 无 <code>create_repository</code> 权限（403），<strong>远程空仓须用户在网页创建</strong>；本地仅对已存在仓库写。</li>
+<li>同步：<code>git push origin main:cloud</code> 将本地主枝同步到云端分支。</li>
+</ul>
+<h3 id="13">1.3 提交规范</h3>
+<p><code>&lt;type&gt;: &lt;subject&gt;</code>，type ∈ {feat, fix, docs, refactor, chore, test}。例：<code>docs: add operation manual</code>。</p>
+<h2 id="2">2. 配置管理</h2>
+<h3 id="21-env-localhost">2.1 配置项（<code>.env</code>，本地 localhost 模式）</h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OPTION_WORKSTATION_HOST</code></td>
+<td>127.0.0.1</td>
+<td>仅本机监听</td>
+</tr>
+<tr>
+<td><code>OPTION_WORKSTATION_PORT</code></td>
+<td>7311</td>
+<td>Web 端口</td>
+</tr>
+<tr>
+<td><code>OPTION_WORKSTATION_DATA_ROOT</code></td>
+<td>./data</td>
+<td>回放数据根</td>
+</tr>
+<tr>
+<td><code>OPTION_WORKSTATION_RISK_FREE_RATE</code></td>
+<td>0.043</td>
+<td>无风险利率</td>
+</tr>
+<tr>
+<td><code>OPTION_WORKSTATION_FRONTEND_DIST</code></td>
+<td>./frontend/dist</td>
+<td>前端构建产物</td>
+</tr>
+<tr>
+<td><code>OPTION_WORKSTATION_AUDIT_PATH</code></td>
+<td>./.option-workstation/audit.jsonl</td>
+<td>审计台账</td>
+</tr>
+<tr>
+<td><code>RUST_LOG</code></td>
+<td>option_workstation=info,tower_http=info</td>
+<td>日志分级</td>
+</tr>
+<tr>
+<td><code>OW_OAUTH_REDIRECT_BASE</code></td>
+<td>（local 不设置）</td>
+<td>云端回调基址（cloud 分支用）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-build-localbat">2.2 编译期环境变量（build-local.bat 内）</h3>
+<ul>
+<li><code>CARGO_HTTP_SSL_NO_REVOKE=true</code>：规避 Windows Schannel 证书吊销检查失败。</li>
+<li><code>RUSTUP_USE_RUSTLS=1</code>：强制 rustup 用 rustls（避 Schannel）。</li>
+</ul>
+<h3 id="23">2.3 工具链约束</h3>
+<ul>
+<li>工具链：<code>stable-x86_64-pc-windows-gnu</code>（<strong>非 MSVC</strong>）。</li>
+<li>MinGW：<code>C:\mingw64\bin</code>（gcc/ld）。</li>
+<li>cargo 配置：<code>rust-backend/.cargo/config.toml</code> 应为<strong>空（零自定义源）</strong>，依赖默认 crates.io + 上述环境变量。</li>
+</ul>
+<h3 id="24">2.4 依赖与补丁</h3>
+<ul>
+<li><code>Cargo.lock</code> 锁定版本，避免漂移。</li>
+<li>本地 patch（<code>Cargo.toml</code> <code>[patch.crates-io]</code>）：<code>longbridge-oauth</code>、<code>dotenv</code>、<code>paste</code> 指向 <code>../vendor/*</code>，确保受限网络下可编译。</li>
+</ul>
+<h3 id="25">2.5 密钥与凭据</h3>
+<ul>
+<li>Longbridge OAuth token：<strong>进程内存只存</strong>（代码标记 <code>credential_storage: "process_memory_only"</code>），不落盘。</li>
+<li>不提交任何密钥/<code>.env</code> 实际凭据到仓库（<code>.env</code> 仅模板级，仓库内为本地配置，注意勿含个人 token 残留）。</li>
+</ul>
+<h2 id="3">3. 配置基线发布</h2>
+<p>每次发版须确认：工具链版本、<code>.env</code> 模板、前端 <code>dist</code> 已构建、<code>Cargo.lock</code> 一致。</p></section>
+<section class="doc" id="doc-11"><h1 id="r4trade-api">R4｜Trade API 不可用 — 长桥侧排查清单</h1>
+<blockquote>
+<p>文档版本：v1.0 ｜ 编制日期：2026-08-26 ｜ 对应代码：<code>rust-backend/src/live.rs:752-822</code>
+关联风险：<code>07-风险登记册.md</code> 的 <strong>R4（交易 API 不可用，高）</strong>
+适用范围：OptionWorkstation 连接设置页显示 <strong>Trade API = Unavailable</strong> 时</p>
+</blockquote>
+<hr />
+<h2 id="0">0. 先理解判定逻辑（代码真因）</h2>
+<p><code>live.rs</code> 判断是否"交易可用"靠两个长桥 OpenAPI 调用，任一成功即视为可用：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// live.rs:752-822（节选）</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">trade_overview</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trade</span><span class="p">.</span><span class="n">us_asset_overview</span><span class="p">().</span><span class="k">await</span><span class="p">.</span><span class="n">ok</span><span class="p">();</span><span class="w">        </span><span class="c1">// 资产概览</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">trade_balances</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">trade_overview</span><span class="p">.</span><span class="n">is_none</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">trade</span><span class="p">.</span><span class="n">account_balance</span><span class="p">(</span><span class="nb">Some</span><span class="p">(</span><span class="s">&quot;USD&quot;</span><span class="p">)).</span><span class="k">await</span><span class="p">.</span><span class="n">ok</span><span class="p">()</span><span class="w">                 </span><span class="c1">// 账户余额（兜底）</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nb">None</span><span class="w"> </span><span class="p">};</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">trade_connected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trade_overview</span><span class="p">.</span><span class="n">is_some</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">trade_balances</span><span class="p">.</span><span class="n">is_some</span><span class="p">();</span>
+<span class="c1">// ...</span>
+<span class="n">trade</span><span class="p">:</span><span class="w"> </span><span class="nc">trade_connected</span><span class="p">.</span><span class="n">then_some</span><span class="p">(</span><span class="n">trade</span><span class="p">),</span><span class="w">   </span><span class="c1">// 为 false 时 TradeContext 不入库</span>
+</code></pre></div>
+
+<ul>
+<li>前端显示 <strong>Unavailable</strong> = <code>trade_connected == false</code>
+  = <code>us_asset_overview()</code> 与 <code>account_balance()</code> <strong>两个调用都返回 None</strong>（<code>.ok()</code> 把 Err/空都吞成 None）。</li>
+<li>一旦 false，<code>TradeContext</code> 不存入 engine → 所有 <code>/api/trade/*</code> 报
+  <code>trade permission is unavailable for this token</code>。</li>
+</ul>
+<blockquote>
+<p>注意：这是<strong>长桥账户/授权层面</strong>的问题，OptionWorkstation 无需改代码。即便打通，本版 <code>order_execution_enabled</code> 还要求 <code>paper_account &amp;&amp; paper_execution_requested</code>——即<strong>只支持模拟账户(paper)的模拟单，实盘下单锁定</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 常见根因（按概率排序）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>根因</th>
+<th>外在表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>OAuth 授权 scope 未含「交易」</strong></td>
+<td>登录时申请的是 <code>quote</code> 权限，Trade 查询被拒（最常见）</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>账户未开通 OpenAPI 交易服务</strong></td>
+<td>App 内「美国期权市场 ✅」是下单/市场权限，与资产查询 API 是两套体系</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>账户无交易账户（未开户/未激活）</strong></td>
+<td><code>us_asset_overview</code> 无数据可查</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>应用为「只读行情」类型</strong></td>
+<td>在长桥开发者后台创建 OAuth 应用时选错了类型</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2">2. 真值探测（在你的电脑上跑，验证到底是哪一类）</h2>
+<p>用你本机已装的长桥 CLI（路径 <code>C:\Users\SJTUH\AppData\Local\Programs\longbridge\longbridge</code>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># 1) 先看 CLI 是否提供交易类子命令（以实际 --help 为准）</span>
+<span class="p">&amp;</span> <span class="s2">&quot;C:\Users\SJTUH\AppData\Local\Programs\longbridge\longbridge&quot;</span> <span class="p">-</span><span class="n">-help</span>
+<span class="p">&amp;</span> <span class="s2">&quot;C:\Users\SJTUH\AppData\Local\Programs\longbridge\longbridge&quot;</span> <span class="n">trade</span> <span class="p">-</span><span class="n">-help</span>
+
+<span class="c"># 2) 尝试账户/资产查询（对应代码里的 us_asset_overview / account_balance）</span>
+<span class="p">&amp;</span> <span class="s2">&quot;C:\Users\SJTUH\AppData\Local\Programs\longbridge\longbridge&quot;</span> <span class="n">trade</span> <span class="n">assets</span> <span class="p">-</span><span class="n">-format</span> <span class="n">json</span>
+<span class="p">&amp;</span> <span class="s2">&quot;C:\Users\SJTUH\AppData\Local\Programs\longbridge\longbridge&quot;</span> <span class="n">trade</span> <span class="n">balances</span> <span class="p">-</span><span class="n">-format</span> <span class="n">json</span>
+</code></pre></div>
+
+<ul>
+<li>若返回 <strong><code>code=...: no trade access</code> / <code>trade permission denied</code></strong> → 命中根因 1/2/4。</li>
+<li>若返回 <strong>正常 JSON 账户数据</strong> → 说明权限在，问题在 OW 的 OAuth token 授权范围；回到第 3 步重连并刷新凭证。</li>
+</ul>
+<blockquote>
+<p>注：CLI 子命令名以 <code>longbridge --help</code> 实际输出为准，不同版本略有差异。</p>
+</blockquote>
+<hr />
+<h2 id="3">3. 修复步骤（按顺序）</h2>
+<h3 id="a-oauth">步骤 A — 确认 OAuth 应用授权范围含「交易」</h3>
+<ol>
+<li>登录长桥开发者后台（OpenAPI / 应用管理）。</li>
+<li>找到 OptionWorkstation 使用的 OAuth 应用。</li>
+<li>检查 <strong>授权范围(scopes)</strong> 是否包含 <code>trade</code>（或 <code>account</code>、<code>assets</code>）。</li>
+<li>若仅含 <code>quote</code>，<strong>在后台追加交易相关 scope 并保存</strong>。</li>
+</ol>
+<h3 id="b">步骤 B — 确认账户已开通交易服务</h3>
+<ol>
+<li>长桥 App → 账户 → 检查是否<strong>已开通美股交易账户</strong>（且已激活）。</li>
+<li>在长桥「开发者 / OpenAPI」页确认该账户已<strong>启用交易 API</strong>。</li>
+<li>注意「美国期权市场 ✅」是<strong>下单/市场权限</strong>，与 <code>us_asset_overview</code> 资产查询 API <strong>是两套</strong>，需分别确认。</li>
+</ol>
+<h3 id="c-optionworkstation">步骤 C — 在 OptionWorkstation 内重连刷新凭证</h3>
+<ol>
+<li>打开连接设置页。</li>
+<li>点 <strong>「更换并验证凭证」</strong>（触发 OAuth 重新授权，确保新 scope 生效）。</li>
+<li>观察 <strong>Trade API</strong> 状态是否变为可用。</li>
+</ol>
+<h3 id="d">步骤 D — 仍不可用时的二次确认</h3>
+<ul>
+<li>回到第 2 步用 CLI 真值探测，确认是权限还是网络。</li>
+<li>若 CLI 正常、OW 仍 Unavailable，清理本地 token 缓存后重连：</li>
+<li>删除 <code>.option-workstation/</code> 下相关 token 文件，重启 <code>start.bat</code> 重新 OAuth。</li>
+</ul>
+<hr />
+<h2 id="4">4. 验证通过标准（验收）</h2>
+<ul>
+<li>[ ] 连接设置页 <strong>Trade API = Available</strong></li>
+<li>[ ] <code>GET /api/trade/account</code> 返回账户 JSON（非 <code>trade permission is unavailable</code>）</li>
+<li>[ ] 模拟单接口 <code>POST /api/trade/orders</code> 在 <code>paper_account &amp;&amp; paper_execution_requested</code> 下可提交（实盘仍锁定，符合设计）</li>
+</ul>
+<hr />
+<h2 id="5">5. 关联文档</h2>
+<ul>
+<li><code>02-需求规格说明书.md</code> FR-19</li>
+<li><code>04-接口设计说明书.md</code> 第 8 节（交易，预留）</li>
+<li><code>07-风险登记册.md</code> R4</li>
+<li><code>操作手册.md</code> 第 4/7 节（<code>.env</code> 与排查）</li>
+</ul></section>
+<section class="doc" id="doc-12"><h1 id="optionworkstation">OptionWorkstation 操作手册</h1>
+<blockquote>
+<p>版本：0.1.0 ｜ 最后更新：2026-08-24 ｜ 适用环境：Windows 10/11 本地部署
+仓库：<code>git@github.com:GuoKYu/Option-Workstation-Local.git</code>（分支 <code>main</code> 本地主枝 / <code>cloud</code> 云端分支）</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 项目概述</h2>
+<p>OptionWorkstation 是一个<strong>本地部署</strong>的美股期权分析工作站，用于期权链构建、隐含波动率曲面、希腊字母与套利/风险分析。</p>
+<ul>
+<li><strong>架构</strong>：Rust（axum）后端 + React 前端，单进程容器。</li>
+<li><strong>本地访问</strong>：<code>http://127.0.0.1:7311</code>（仅本机可达，不暴露到局域网）。</li>
+<li><strong>OAuth 回调</strong>：<code>http://localhost:60355/callback</code>（本地模式，无需在长桥配置白名单）。</li>
+<li><strong>行情源</strong>：Longbridge OpenAPI（正股用 <code>SubFlags::QUOTE</code>，期权用 <code>SubFlags::DEPTH</code>）。</li>
+<li><strong>数据存储</strong>：本地 <code>./data</code> 目录（历史回放数据，实时模式不依赖），审计日志 <code>./.option-workstation/audit.jsonl</code>。</li>
+</ul>
+<h3 id="_1">关键路径</h3>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rust-backend/</code></td>
+<td>Rust 后端源码（axum 服务、长桥集成、期权分析）</td>
+</tr>
+<tr>
+<td><code>frontend/</code></td>
+<td>React 前端源码</td>
+</tr>
+<tr>
+<td><code>rust-backend/target/release/option-workstation.exe</code></td>
+<td>编译产物（约 20MB），<code>start.bat</code> 直接启动它</td>
+</tr>
+<tr>
+<td><code>.env</code></td>
+<td>本地运行配置</td>
+</tr>
+<tr>
+<td><code>build-local.bat</code></td>
+<td>首次/改动后编译并启动（含工具链检测）</td>
+</tr>
+<tr>
+<td><code>start.bat</code></td>
+<td>日常启动（不重新编译，直接跑 exe）</td>
+</tr>
+<tr>
+<td><code>install-mingw-gnu.bat</code></td>
+<td>首次安装 MinGW GNU 编译工具链</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2">2. 系统要求</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>操作系统</td>
+<td>Windows 10 / 11（64 位）</td>
+</tr>
+<tr>
+<td>编译工具链</td>
+<td>MinGW-w64 GCC（GNU 工具链），<code>gcc</code>/<code>ld</code> 位于 <code>C:\mingw64\bin</code></td>
+</tr>
+<tr>
+<td>Rust</td>
+<td>rustup，<code>stable-x86_64-pc-windows-gnu</code> 工具链（<strong>必须 GNU，不是 MSVC</strong>）</td>
+</tr>
+<tr>
+<td>网络</td>
+<td>首次编译需从 crates.io 下载依赖（本机实测 GitHub/crates.io 直连常被挡，<strong>手机热点可通</strong>）</td>
+</tr>
+<tr>
+<td>长桥账号</td>
+<td>已注册 Longbridge OpenAPI 账号，并开通对应行情权限（见第 6 节）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>说明：本项目<strong>不使用 VS Build Tools / MSVC</strong>，改用 MinGW GNU 工具链，避免微软下载域名被封导致无法安装 <code>link.exe</code> 的问题。</p>
+</blockquote>
+<hr />
+<h2 id="3">3. 环境准备（仅首次）</h2>
+<h3 id="31-mingw-gnu">3.1 安装 MinGW GNU 工具链</h3>
+<p>双击运行 <code>install-mingw-gnu.bat</code>（纯 ASCII 脚本，规避中文乱码）：</p>
+<ol>
+<li>自动从 <code>https://nuwen.net/files/mingw/mingw-20.0.exe</code> 下载（<strong>非 GitHub、非 Microsoft 源</strong>）。</li>
+<li>弹出解压对话框时，解压路径填 <code>C:\mingw64</code>。</li>
+<li>注意 nuwen 安装包会多套一层 <code>MinGW/</code>，若解压后 <code>C:\mingw64\bin\gcc.exe</code> 不存在，需手动把 <code>C:\mingw64\MinGW\*</code> 移到 <code>C:\mingw64\</code> 并删掉空的 <code>MinGW</code>。</li>
+<li>脚本自动把 <code>C:\mingw64\bin</code> 加入系统 PATH，并切换 Rust 到 GNU 工具链。</li>
+<li>完成后<strong>开一个新 cmd 窗口</strong>使 PATH 生效。</li>
+</ol>
+<p>若 nuwen 下载失败（网络封禁），手动方案：在能联网的设备下载 <code>mingw-20.0.exe</code> 拷到本机运行，解压到 <code>C:\mingw64</code>，然后手动执行：</p>
+<div class="codehilite"><pre><span></span><code>setx PATH <span class="s2">&quot;</span><span class="nv">%PATH%</span><span class="s2">;C:\mingw64\bin&quot;</span>
+rustup toolchain install stable-x86_64-pc-windows-gnu
+rustup default stable-x86_64-pc-windows-gnu
+</code></pre></div>
+
+<h3 id="32-rustrustup">3.2 安装 Rust（rustup）</h3>
+<p>从 https://win.rustup.rs/x86_64 下载 rustup-init.exe 安装。安装后确认默认工具链为 GNU：</p>
+<div class="codehilite"><pre><span></span><code>rustup default stable-x86_64-pc-windows-gnu
+rustc --version     :: 应含 <span class="s2">&quot;gnu&quot;</span>
+gcc --version       :: 应来自 C:\mingw64\bin
+</code></pre></div>
+
+<h3 id="33">3.3 获取代码</h3>
+<p>项目已在本机 <code>C:\Users\SJTUH\optionworkstation</code>。如需从 GitHub 重新拉取：</p>
+<div class="codehilite"><pre><span></span><code>git clone git@github.com:GuoKYu/Option-Workstation-Local.git
+<span class="k">cd</span> Option-Workstation-Local
+git checkout main
+</code></pre></div>
+
+<blockquote>
+<p>推送走 SSH 443 端口（<code>~/.ssh/config</code> 已配置 <code>Host github.com → ssh.github.com:443</code>），新建空仓库需在 GitHub 网页操作（GitHub MCP 无建仓权限）。</p>
+</blockquote>
+<hr />
+<h2 id="4-env">4. 配置 <code>.env</code></h2>
+<p>本地模式默认 <code>.env</code> 已就位（localhost 模式，无需白名单）。关键项：</p>
+<div class="codehilite"><pre><span></span><code><span class="na">OPTION_WORKSTATION_HOST</span><span class="o">=</span><span class="s">127.0.0.1</span><span class="w">      </span><span class="c1"># 仅本机</span>
+<span class="na">OPTION_WORKSTATION_PORT</span><span class="o">=</span><span class="s">7311</span><span class="w">           </span><span class="c1"># Web 端口</span>
+<span class="na">OPTION_WORKSTATION_DATA_ROOT</span><span class="o">=</span><span class="s">./data</span>
+<span class="na">OPTION_WORKSTATION_RISK_FREE_RATE</span><span class="o">=</span><span class="s">0.043</span>
+<span class="na">OPTION_WORKSTATION_FRONTEND_DIST</span><span class="o">=</span><span class="s">./frontend/dist</span>
+<span class="na">OPTION_WORKSTATION_AUDIT_PATH</span><span class="o">=</span><span class="s">./.option-workstation/audit.jsonl</span>
+<span class="na">RUST_LOG</span><span class="o">=</span><span class="s">option_workstation=info,tower_http=info</span>
+</code></pre></div>
+
+<blockquote>
+<p>本地模式<strong>不设</strong> <code>OW_OAUTH_REDIRECT_BASE</code>，OAuth 自动用 <code>http://localhost:60355/callback</code>。云端部署（cloud 分支）才需要设置该变量（见 <code>DEPLOY-CLOUD.md</code> 与 <code>.env.example</code>）。</p>
+</blockquote>
+<hr />
+<h2 id="5">5. 构建与启动</h2>
+<h3 id="51">5.1 首次构建 / 代码改动后</h3>
+<p>双击 <code>build-local.bat</code>，它会：</p>
+<ol>
+<li>检测 <code>gcc.exe</code> 与 <code>rustup.exe</code> 是否在 PATH；</li>
+<li>激活 <code>stable-x86_64-pc-windows-gnu</code> 工具链；</li>
+<li>设 <code>CARGO_HTTP_SSL_NO_REVOKE=true</code> 与 <code>RUSTUP_USE_RUSTLS=1</code>（规避 Windows schannel SSL 吊销检查失败、crates.io 直连问题）；</li>
+<li>执行 <code>cargo build --release --manifest-path rust-backend/Cargo.toml</code>；</li>
+<li>编译成功后直接启动 <code>option-workstation.exe</code>。</li>
+</ol>
+<p>首次编译约几分钟（下载依赖）。若报 SSL / 网络错误，确认网络可达 crates.io（必要时切手机热点），关闭 cmd 重开后再跑一次。</p>
+<h3 id="52">5.2 日常启动</h3>
+<p>代码未改动时，<strong>双击 <code>start.bat</code></strong> 即可，它直接运行已编译的 <code>target/release/option-workstation.exe</code>，不重新编译。</p>
+<p>启动后浏览器打开 <code>http://127.0.0.1:7311</code>。</p>
+<blockquote>
+<p>⚠️ 不要误跑旧脚本 <code>start-local.bat</code> / <code>install-buildtools.bat</code>（早已废弃：前者逻辑已并入 <code>build-local.bat</code>，后者依赖被封的微软域名）。</p>
+</blockquote>
+<h3 id="53">5.3 停止</h3>
+<p>关闭运行中的 cmd 窗口即可。</p>
+<hr />
+<h2 id="6">6. 长桥账号与行情权限配置（关键）</h2>
+<p>OptionWorkstation 走 <strong>OpenAPI 通道</strong>，权限体系与长桥 App / 网页端<strong>相互独立</strong>。务必确认以下两项都已开通：</p>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>渠道</th>
+<th>必要性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LV1 实时行情（OpenAPI）</td>
+<td>OpenAPI</td>
+<td>正股行情（SPY 等）✅</td>
+</tr>
+<tr>
+<td><strong>OPRA 美股期权行情（OpenAPI）</strong></td>
+<td><strong>OpenAPI</strong></td>
+<td><strong>期权实时报价（bid/ask/IV）✅ 必开</strong></td>
+</tr>
+<tr>
+<td>OPRA 美股期权行情（移动端/桌面端/网页端）</td>
+<td>App/Web</td>
+<td>仅 App 内看期权用，<strong>OpenAPI 不认</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">开通步骤</h3>
+<ol>
+<li>登录长桥 <strong>Quote Store（行情商店）</strong>。</li>
+<li>找到 <strong>「OPRA 美股期权行情 (OpenAPI)」</strong>（注意带 <code>(OpenAPI)</code> 后缀的那一项，不是同名无后缀项），点击开通（推广期免费）。</li>
+<li>回到 OptionWorkstation 设置页 → 点 <strong>「更换并验证凭证」</strong> 刷新 OAuth token，使新权限生效。</li>
+</ol>
+<h3 id="cli">验证权限（可选，用长桥 CLI）</h3>
+<div class="codehilite"><pre><span></span><code><span class="p">:</span><span class="c1">: 正股（应有价格返回）</span>
+longbridge quote SPY.US --format json
+
+<span class="p">:</span><span class="c1">: 期权链（免费 Level 1，应返回到期日列表）</span>
+longbridge option chain SPY.US --format json
+
+<span class="p">:</span><span class="c1">: 单个期权实时报价（需 OPRA OpenAPI 权限）</span>
+<span class="p">:</span><span class="c1">: 正确格式：标的+到期(YYMMDD)+C/P+行权价×1000（6 位）</span>
+longbridge option quote SPY260918C765000.US --format json
+</code></pre></div>
+
+<ul>
+<li>若最后一条返回 <code>code=301604: no quote access</code> → 即<strong>缺 OPRA(OpenAPI) 权限</strong>，按上面步骤开通。</li>
+<li>期权代码格式：行权价用 6 位（价格×1000，如 765.00 → <code>765000</code>），不要多填零。</li>
+</ul>
+<hr />
+<h2 id="7">7. 常见问题排查</h2>
+<h3 id="71-longbridge-xxx-59">7.1 提示「已排队等待 Longbridge 限频窗口；当前 XXX 行情继续推送，约 59 秒后自动重试」</h3>
+<ul>
+<li><strong>出处</strong>：前端 <code>frontend/src/App.jsx:379</code>。</li>
+<li><strong>根因</strong>：后端 <code>rust-backend/src/live.rs:47</code> 定义全局期权请求冷却 <strong><code>OPTION_REQUEST_COOLDOWN = 65 秒</code></strong>（live.rs:214-218）。该冷却是<strong>单个全局时间戳</strong>，所有期权类请求（切到期月订阅 + 后台 90 秒元数据刷新）共享。65 秒内再次请求期权链会被限频排队，到点自动重试。</li>
+<li><strong>影响</strong>：无害。行情流不受影响，到点自动恢复。</li>
+<li><strong>规避</strong>：避免在 65 秒内重复点 Start / 频繁切换到期月份；或等它自动重试。</li>
+<li><strong>（可选代码改进）</strong>：把 <code>option_request_at</code> 改为 <code>HashMap&lt;symbol, Instant&gt;</code>（按标的分冷却）、或让后台刷新与手动切换用独立时间戳。当前未改，不影响使用。</li>
+</ul>
+<h3 id="72-selected-expiration-has-no-usable-quotes-yet">7.2 提示「selected expiration has no usable quotes yet」</h3>
+<ul>
+<li><strong>出处</strong>：后端 <code>rust-backend/src/live.rs:1319</code> → 实际由 <code>analytics.rs:648</code> 的 <code>anyhow::ensure!(!rows.is_empty(), "no usable option quotes")</code> 触发。</li>
+<li><strong>含义</strong>：选中到期日下的所有合约都构建不出一行有效期权数据（行要成立需算出一个落在 1%~400% 的有效 IV）。</li>
+<li><strong>最常见根因（本项目实测）</strong>：<strong>缺「OPRA 美股期权行情 (OpenAPI)」权限</strong>。订阅被长桥接受但不推数据 → <code>cache.depth</code> 全空 → 无有效 IV → 报此错。</li>
+<li>验证：见 6.3 的 CLI 命令，返回 <code>code=301604</code> 即确认。</li>
+<li><strong>次因（瞬态）</strong>：刚切到期月、期权深度行情还没推过来，几秒后自愈。</li>
+<li><strong>连锁关系</strong>：常与 7.1 同时出现——65s 冷却挡在真正订阅行情之前，导致新到期月没订阅到数据，于是紧接着报「无可用报价」。</li>
+<li><strong>处理</strong>：</li>
+<li>先确认已开通 <strong>OPRA(OpenAPI)</strong> 权限（见第 6 节），这是根治手段；</li>
+<li>若权限已就绪仍偶发，等几秒让其自动重试；</li>
+<li>个别到期月流动性极差（非主链）可换近月或标准月度到期。</li>
+</ul>
+<h3 id="73-ssl">7.3 编译报错（SSL / 网络 / 工具链）</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>link.exe not found</code></td>
+<td>未用 GNU 工具链。确认 <code>rustup default stable-x86_64-pc-windows-gnu</code>，且 <code>C:\mingw64\bin</code> 在 PATH。</td>
+</tr>
+<tr>
+<td>SSL / <code>unable to get local issuer certificate</code></td>
+<td><code>build-local.bat</code> 已设 <code>CARGO_HTTP_SSL_NO_REVOKE=true</code>。仍报错则确认网络能达 crates.io（必要时手机热点）。</td>
+</tr>
+<tr>
+<td>crates.io 下载超时（直连被挡）</td>
+<td>切手机热点；或检查 <code>rust-backend/.cargo/config.toml</code> 应为<strong>空（零自定义源）</strong>，靠默认 crates.io + 环境变量。</td>
+</tr>
+<tr>
+<td><code>gcc</code> 找到但 <code>rustup</code> 不在 PATH</td>
+<td><code>build-local.bat</code> 已显式加 <code>C:\Users\SJTUH\.cargo\bin</code>，重开 cmd 后重试。</td>
+</tr>
+<tr>
+<td><code>sparse url must end with '/'</code> / <code>ssl-no-revoke</code> 键不被识别</td>
+<td>删除 <code>config.toml</code> 里的自定义 source 与 <code>ssl-no-revoke</code> 键，仅依赖环境变量。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="74-1270017311">7.4 启动后打不开 127.0.0.1:7311</h3>
+<ol>
+<li>确认 <code>start.bat</code> / <code>build-local.bat</code> 的 cmd 窗口仍开着（关窗即停服务）。</li>
+<li>确认 <code>target/release/option-workstation.exe</code> 已生成（未编译成功则没有）。</li>
+<li>检查防火墙是否拦了 7311 端口（本机回环一般不需放行）。</li>
+<li>看 cmd 窗口日志是否有 panic / 长桥连接错误。</li>
+</ol>
+<hr />
+<h2 id="8">8. 更新与维护</h2>
+<h3 id="_3">拉取最新代码</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">cd</span> C:\Users\SJTUH\optionworkstation
+git checkout main
+git pull origin main
+</code></pre></div>
+
+<h3 id="_4">改动代码后重新构建</h3>
+<p>双击 <code>build-local.bat</code>（会重新 <code>cargo build --release</code> 并启动）。</p>
+<h3 id="_5">提交与推送</h3>
+<div class="codehilite"><pre><span></span><code>git add -A
+git commit -m <span class="s2">&quot;描述改动&quot;</span>
+git push origin main          :: 推本地主枝
+<span class="p">:</span><span class="c1">: 同步到云端分支</span>
+git push origin main:cloud
+</code></pre></div>
+
+<blockquote>
+<p>SSH 走 443（<code>~/.ssh/config</code> 已配）。<strong>新建远程仓库需在 GitHub 网页操作</strong>，本机只能对已存在仓库写入。</p>
+</blockquote>
+<h3 id="cloud">云端分支（cloud）</h3>
+<ul>
+<li><code>cloud</code> 分支用于云端部署，使用 <code>.env.example</code> / <code>DEPLOY-CLOUD.md</code> 中的云端配置（含 <code>OW_OAUTH_REDIRECT_BASE</code> 公网回调，需在长桥配置白名单）。本地部署用 <code>main</code> 即可。</li>
+</ul>
+<hr />
+<h2 id="9">9. 文件索引</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>build-local.bat</code></td>
+<td>首次/改动后编译+启动（检测工具链、设 SSL 绕过、cargo build、启动 exe）</td>
+</tr>
+<tr>
+<td><code>start.bat</code></td>
+<td>日常启动，直接跑已编译 exe，不重编译</td>
+</tr>
+<tr>
+<td><code>install-mingw-gnu.bat</code></td>
+<td>首次安装 MinGW GNU 工具链（nuwen.net 源）</td>
+</tr>
+<tr>
+<td><code>start-local.bat</code> / <code>install-buildtools.bat</code></td>
+<td><strong>废弃</strong>，勿用</td>
+</tr>
+<tr>
+<td><code>.env</code></td>
+<td>本地运行配置（localhost 模式）</td>
+</tr>
+<tr>
+<td><code>.env.example</code> / <code>DEPLOY-CLOUD.md</code></td>
+<td>云端部署模板与说明</td>
+</tr>
+<tr>
+<td><code>rust-backend/.cargo/config.toml</code></td>
+<td>应为空（零自定义源），SSL 绕过靠环境变量</td>
+</tr>
+<tr>
+<td><code>rust-backend/src/live.rs</code></td>
+<td>长桥集成、65s 期权冷却、订阅逻辑</td>
+</tr>
+<tr>
+<td><code>rust-backend/src/analytics.rs</code></td>
+<td>期权链构建、IV 计算（<code>no usable quotes</code> 判定在 648 行）</td>
+</tr>
+<tr>
+<td><code>frontend/src/App.jsx</code></td>
+<td>前端 UI、限频提示（379 行）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10">10. 一句话速查</h2>
+<ul>
+<li><strong>日常用</strong>：双击 <code>start.bat</code> → 开 <code>http://127.0.0.1:7311</code>。</li>
+<li><strong>改完代码</strong>：双击 <code>build-local.bat</code>。</li>
+<li><strong>期权没报价</strong>：九成是没开「OPRA 美股期权行情 (OpenAPI)」权限，去行情商店开通后点「更换并验证凭证」。</li>
+<li><strong>看到限频排队</strong>：无害，等 65 秒自动重试，别在窗口内狂点。</li>
+</ul></section>
+<section class="doc" id="doc-13"><h1 id="optionworkstation-documentation-index">OptionWorkstation 文档包说明（Documentation Index）</h1>
+<blockquote>
+<p>版本：v1.0 ｜ 编制：2026-08-24 ｜ 项目：OptionWorkstation（美股期权分析工作站，Apache-2.0，v0.1.0）
+仓库：<code>git@github.com:GuoKYu/Option-Workstation-Local.git</code>（分支：<code>main</code> 本地主枝 / <code>cloud</code> 云端分支）</p>
+</blockquote>
+<hr />
+<h2 id="_1">文档清单</h2>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>文档</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00</td>
+<td><code>操作手册.md</code>（根目录）</td>
+<td>本机部署/启动/权限配置/排障速查</td>
+</tr>
+<tr>
+<td>01</td>
+<td><code>docs/01-项目章程.md</code></td>
+<td>高层授权：目标、范围、里程碑、干系人、风险</td>
+</tr>
+<tr>
+<td>02</td>
+<td><code>docs/02-需求规格说明书.md</code></td>
+<td>FR/NFR 需求基线（FR-01~21，NFR-01~06）</td>
+</tr>
+<tr>
+<td>03</td>
+<td><code>docs/03-架构设计说明书.md</code></td>
+<td>单体架构、技术栈、8 模块职责、关键数据流</td>
+</tr>
+<tr>
+<td>04</td>
+<td><code>docs/04-接口设计说明书.md</code></td>
+<td>REST/WebSocket 端点、参数、响应示例</td>
+</tr>
+<tr>
+<td>05</td>
+<td><code>docs/05-项目计划.md</code></td>
+<td>WBS、里程碑、关键路径、资源</td>
+</tr>
+<tr>
+<td>06</td>
+<td><code>docs/06-需求跟踪矩阵.md</code></td>
+<td>需求→设计→实现→测试→验收追溯</td>
+</tr>
+<tr>
+<td>07</td>
+<td><code>docs/07-风险登记册.md</code></td>
+<td>8 项风险（含 R1 期权权限、R4 交易 API）</td>
+</tr>
+<tr>
+<td>08</td>
+<td><code>docs/08-测试计划与测试用例.md</code></td>
+<td>单元/集成/E2E、23 用例</td>
+</tr>
+<tr>
+<td>09</td>
+<td><code>docs/09-验收标准.md</code></td>
+<td>验收清单与结论分级</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>docs/10-配置与版本管理计划.md</code></td>
+<td>语义化版本、分支、配置项、密钥管理</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">阅读顺序建议</h2>
+<ol>
+<li>想<strong>直接用</strong>：先看根目录 <code>操作手册.md</code>。</li>
+<li>想<strong>了解项目全貌</strong>：<code>01 项目章程</code> → <code>02 需求</code> → <code>03 架构</code>。</li>
+<li>想<strong>接手开发/测试</strong>：<code>04 接口</code> → <code>08 测试</code> → <code>09 验收</code> → <code>10 配置版本</code>。</li>
+<li>想<strong>把控风险/进度</strong>：<code>05 计划</code> → <code>06 追踪矩阵</code> → <code>07 风险</code>。</li>
+</ol>
+<h2 id="2026-08-24">当前关键状态（2026-08-24）</h2>
+<ul>
+<li>✅ 本地可运行、GitHub 双分支已推送、文档包齐备。</li>
+<li>⏳ <strong>R1</strong>：缺「OPRA 美股期权行情(OpenAPI)」→ 期权无报价，待用户在长桥开通。</li>
+<li>⏳ <strong>R4</strong>：Trade API <code>Unavailable</code>，待定位（OAuth scope/账户开通 OpenAPI 交易）；本版仅支持 paper 模拟单。</li>
+</ul>
+<hr />
+<p><em>本包随 <code>main</code> 分支维护；如需云端部署参考 <code>DEPLOY-CLOUD.md</code> 与 <code>cloud</code> 分支。</em></p></section>
+  </main>
+</div>
+<button class="fx" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ 顶部</button>
+<script>
+var docs = Array.prototype.slice.call(document.querySelectorAll('.doc'));
+var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+function show(i){
+  docs.forEach(function(d,j){d.classList.toggle('active', j===i);});
+  links.forEach(function(l,j){l.classList.toggle('active', j===i);});
+  document.querySelector('main').scrollTop = 0;
+  window.scrollTo({top:0,behavior:'instant'});
+  try{location.hash = '#' + docs[i].id;}catch(e){}
+}
+links.forEach(function(l,i){l.addEventListener('click', function(e){e.preventDefault();show(i);});});
+// deep-link
+var idx = 0;
+if(location.hash){
+  var h = location.hash.slice(1);
+  docs.forEach(function(d,i){ if(d.id===h) idx=i; });
+}
+show(idx);
+</script>
+</body>
+</html>
