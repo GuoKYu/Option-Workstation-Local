@@ -23,19 +23,31 @@ if (-not (Get-Command cargo -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-# 1b. MSVC linker check (Rust on Windows needs link.exe from Visual C++ Build Tools)
-$linkExe = (Get-Command link.exe -ErrorAction SilentlyContinue).Source
-if (-not $linkExe) {
-    Write-Host ""
-    Write-Host "Rust is installed, but the MSVC linker (link.exe) is missing." -ForegroundColor Yellow
-    Write-Host "Install Visual Studio Build Tools with the C++ workload:" -ForegroundColor Yellow
-    Write-Host "  Option A (winget, run cmd as Administrator):" -ForegroundColor White
-    Write-Host '    winget install Microsoft.VisualStudio.2022.BuildTools --override "--wait --quiet --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"' -ForegroundColor White
-    Write-Host "  Option B (manual):" -ForegroundColor White
-    Write-Host "    1) https://visualstudio.microsoft.com/visual-cpp-build-tools/" -ForegroundColor White
-    Write-Host "    2) Download and run 'Build Tools for Visual Studio 2022' as Administrator" -ForegroundColor White
-    Write-Host "    3) Select workload: 'Desktop development with C++'" -ForegroundColor White
-    Write-Host "Then reopen a new terminal and run this script again." -ForegroundColor Yellow
+# 1b. Toolchain / linker check (works for both MSVC and GNU)
+$hostTriple = (rustc -vV 2>$null | Select-String '^host:' | ForEach-Object { $_.ToString().Split(' ')[1] })
+Write-Host "Active Rust host target: $hostTriple" -ForegroundColor DarkGray
+if ($hostTriple -like '*msvc*') {
+    $linkExe = (Get-Command link.exe -ErrorAction SilentlyContinue).Source
+    if (-not $linkExe) {
+        Write-Host ""
+        Write-Host "MSVC toolchain selected but link.exe is missing." -ForegroundColor Yellow
+        Write-Host "Either install Visual Studio Build Tools (C++ workload, run cmd as Administrator):" -ForegroundColor White
+        Write-Host '  winget install Microsoft.VisualStudio.2022.BuildTools --override "--wait --quiet --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"' -ForegroundColor White
+        Write-Host "Or switch to the GNU toolchain (no VS needed):" -ForegroundColor White
+        Write-Host "  rustup toolchain install stable-x86_64-pc-windows-gnu; rustup default stable-x86_64-pc-windows-gnu" -ForegroundColor White
+        Write-Host "Then reopen a new terminal and run this script again." -ForegroundColor Yellow
+        exit 1
+    }
+} elseif ($hostTriple -like '*gnu*') {
+    $gcc = (Get-Command gcc.exe -ErrorAction SilentlyContinue).Source
+    if (-not $gcc) {
+        Write-Host ""
+        Write-Host "GNU toolchain selected but MinGW gcc/ld not found on PATH." -ForegroundColor Yellow
+        Write-Host "Run install-mingw-gnu.bat first (downloads MinGW-w64 and adds it to PATH)." -ForegroundColor White
+        exit 1
+    }
+} else {
+    Write-Host "Unknown Rust host target: $hostTriple" -ForegroundColor Red
     exit 1
 }
 

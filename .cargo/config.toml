@@ -1,0 +1,2 @@
+# Cargo config v7 - minimal: no custom sources, rely on default crates.io
+# SSL bypass handled by environment variable in build-local.bat
