@@ -32,6 +32,17 @@ import StrategyWorkbench from './components/StrategyWorkbench'
 import { api, apiJson, websocketUrl } from './lib/api'
 
 const SurfaceChart = lazy(() => import('./components/SurfaceChart'))
+
+// Series palette tracks the active OW theme so charts stay legible in both the
+// dark default and the light (AIOption-aligned) theme. Mirrors the CSS token
+// values in styles.css for [data-theme="light"].
+function activePalette() {
+  const root = document.documentElement
+  const light = root.getAttribute('data-theme') === 'light'
+  return light
+    ? ['#0f9d6b', '#1f6fd6', '#a96a07', '#c5344b', '#7a5fd0']
+    : ['#54d6b6', '#70a5ff', '#f1c75b', '#ff7e8a', '#b395ff']
+}
 const PALETTE = ['#54d6b6', '#70a5ff', '#f1c75b', '#ff7e8a', '#b395ff']
 const SPEEDS = [0.5, 1, 2, 5, 10, 30]
 
@@ -44,11 +55,45 @@ function detectWebGL() {
   }
 }
 
-const axis = {
-  axisLine: { lineStyle: { color: '#34414d' } },
-  axisTick: { show: false },
-  axisLabel: { color: '#83909c', fontSize: 11 },
-  splitLine: { lineStyle: { color: '#1d2730' } },
+function axisTheme() {
+  const c = ctk()
+  return {
+    axisLine: { lineStyle: { color: c.axisLine } },
+    axisTick: { show: false },
+    axisLabel: { color: c.axisLabel, fontSize: 11 },
+    splitLine: { lineStyle: { color: c.splitLine } },
+  }
+}
+
+// Theme-aware chart primitives so ECharts visuals stay legible in both the dark
+// default and the light (AIOption-aligned) theme. Called inside useMemo so the
+// chart re-renders when the theme flips (App re-renders on message effect? we
+// re-read here each build; the theme effect triggers a state-less DOM change but
+// charts rebuild on data change — force via state if needed).
+function ctk() {
+  const light = document.documentElement.getAttribute('data-theme') === 'light'
+  return {
+    label: light ? '#55606d' : '#8d9aa5',
+    axisLabel: light ? '#55606d' : '#83909c',
+    axisLine: light ? '#c4ced6' : '#34414d',
+    splitLine: light ? '#e3e8ec' : '#1d2730',
+    tooltipBg: light ? '#ffffff' : '#111920',
+    tooltipBorder: light ? '#cdd5dc' : '#34414d',
+    tooltipText: light ? '#1f2733' : '#dce5ec',
+    env3d: light ? '#f4f6f8' : '#0d141a',
+    axis3d: light ? '#b9c2cb' : '#43515d',
+    split3d: light ? '#d6dbe1' : '#26313a',
+    positive: light ? '#0f9d6b' : '#37c99b',
+    negative: light ? '#c5344b' : '#ef6673',
+    grid: light ? '#7a5fd0' : '#b395ff',
+    accent: light ? '#2f6fe0' : '#70a5ff',
+    warn: light ? '#a96a07' : '#f1c75b',
+    positiveSoft: light ? 'rgba(15,157,107,.3)' : 'rgba(84,214,182,.3)',
+    warnSoft: light ? 'rgba(169,106,7,.08)' : 'rgba(241,199,91,.08)',
+    gridSoft: light ? 'rgba(122,95,208,.10)' : 'rgba(179,149,255,.08)',
+    sceneLine: light ? 'rgba(90,110,125,.24)' : 'rgba(205,224,232,.24)',
+    pointText: light ? '#1f2733' : '#dce5ec',
+  }
 }
 
 function formatCompact(value) {
@@ -62,6 +107,9 @@ function formatCompact(value) {
 
 function App() {
   const [mode, setMode] = useState(() => new URLSearchParams(window.location.search).get('mode') === 'live' ? 'live' : 'replay')
+  // Mirrors the AIOption host theme (or ?theme= on the URL). Re-renders the app
+  // so chart options rebuilt via ctk()/axisTheme() pick up the new palette.
+  const [theme, setTheme] = useState(() => new URLSearchParams(window.location.search).get('theme') || 'dark')
   const [catalog, setCatalog] = useState(null)
   const [symbols, setSymbols] = useState(['SPY'])
   const [activeSymbol, setActiveSymbol] = useState('SPY')
@@ -120,6 +168,30 @@ function App() {
   const liveRequestRef = useRef({ id: 0, controller: null, timer: null })
   const replaySnapshotRequestRef = useRef({ id: 0, controller: null })
   const pendingWorkspaceFrameRef = useRef(null)
+
+  // Theme handshake with the AIOption host: OW defaults to its own dark theme,
+  // but when embedded in AIOption's "Option Workstation" module the host passes
+  // its active theme via the iframe URL (?theme=light|dark) and can also push
+  // live changes through postMessage. We mirror AIOption's light palette (handled
+  // in styles.css :root[data-theme="light"]) so the embedded module looks native.
+  useEffect(() => {
+    const apply = (next) => {
+      const t = next === 'light' ? 'light' : 'dark'
+      const root = document.documentElement
+      if (t === 'light') root.setAttribute('data-theme', 'light')
+      else root.removeAttribute('data-theme')
+      setTheme(t)
+    }
+    const params = new URLSearchParams(window.location.search)
+    apply(params.get('theme'))
+    const onMessage = (event) => {
+      if (event.data && typeof event.data === 'object' && 'theme' in event.data) {
+        apply(event.data.theme)
+      }
+    }
+    window.addEventListener('message', onMessage)
+    return () => window.removeEventListener('message', onMessage)
+  }, [])
 
   const refreshAudit = useCallback(async () => {
     const records = await api('/api/audit/records?limit=50')
@@ -545,11 +617,11 @@ function App() {
     if (symbols.length > 1) {
       return {
         animation: false,
-        tooltip: { trigger: 'axis', backgroundColor: '#111920', borderColor: '#34414d', textStyle: { color: '#dce5ec' } },
-        legend: { top: 8, right: 12, textStyle: { color: '#8d9aa5' } },
+        tooltip: { trigger: 'axis', backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder, textStyle: { color: ctk().tooltipText } },
+        legend: { top: 8, right: 12, textStyle: { color: ctk().label } },
         grid: { left: 54, right: 24, top: 42, bottom: 38 },
-        xAxis: { type: 'category', data: times, boundaryGap: false, ...axis },
-        yAxis: { type: 'value', scale: true, axisLabel: { formatter: '{value}%', color: '#83909c' }, ...axis },
+        xAxis: { type: 'category', data: times, boundaryGap: false, ...axisTheme() },
+        yAxis: { type: 'value', scale: true, axisLabel: { formatter: '{value}%', color: ctk().axisLabel }, ...axisTheme() },
         series: symbols.map((symbol, index) => {
           const bars = currentBars[symbol] || []
           const base = bars[0]?.close || 1
@@ -560,15 +632,15 @@ function App() {
     const bars = currentBars[activeSymbol] || []
     return {
       animation: false,
-      tooltip: { trigger: 'axis', axisPointer: { type: 'cross' }, backgroundColor: '#111920', borderColor: '#34414d', textStyle: { color: '#dce5ec' } },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'cross' }, backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder, textStyle: { color: ctk().tooltipText } },
       grid: [{ left: 54, right: 24, top: 26, height: '64%' }, { left: 54, right: 24, top: '76%', height: '15%' }],
-      xAxis: [{ type: 'category', data: times, boundaryGap: true, ...axis }, { type: 'category', gridIndex: 1, data: times, axisLabel: { color: '#83909c', fontSize: 11 }, axisLine: axis.axisLine }],
-      yAxis: [{ type: 'value', scale: true, ...axis }, { type: 'value', gridIndex: 1, splitNumber: 2, axisLabel: { show: false }, ...axis }],
+      xAxis: [{ type: 'category', data: times, boundaryGap: true, ...axisTheme() }, { type: 'category', gridIndex: 1, data: times, axisLabel: { color: ctk().axisLabel, fontSize: 11 }, axisLine: axisTheme().axisLine }],
+      yAxis: [{ type: 'value', scale: true, ...axisTheme() }, { type: 'value', gridIndex: 1, splitNumber: 2, axisLabel: { show: false }, ...axisTheme() }],
       dataZoom: [{ type: 'inside', xAxisIndex: [0, 1], start: Math.max(0, 100 - 18000 / Math.max(bars.length, 1)), end: 100 }],
       series: [
-        { name: activeSymbol, type: 'candlestick', data: bars.map((bar) => [bar.open, bar.close, bar.low, bar.high]), itemStyle: { color: '#37c99b', color0: '#ef6673', borderColor: '#37c99b', borderColor0: '#ef6673' }, markLine: focusStrike ? { silent: true, symbol: 'none', label: { formatter: `${focusStrike}`, color: '#f1c75b' }, lineStyle: { color: '#f1c75b', type: 'dashed' }, data: [{ yAxis: focusStrike }] } : undefined },
-        { name: 'VWAP', type: 'line', showSymbol: false, data: bars.map((bar) => bar.vwap), lineStyle: { color: '#f1c75b', width: 1.2 }, smooth: false },
-        { name: 'Volume', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: bars.map((bar) => bar.volume), itemStyle: { color: '#334655' } },
+        { name: activeSymbol, type: 'candlestick', data: bars.map((bar) => [bar.open, bar.close, bar.low, bar.high]), itemStyle: { color: ctk().positive, color0: ctk().negative, borderColor: ctk().positive, borderColor0: ctk().negative }, markLine: focusStrike ? { silent: true, symbol: 'none', label: { formatter: `${focusStrike}`, color: '#f1c75b' }, lineStyle: { color: ctk().warn, type: 'dashed' }, data: [{ yAxis: focusStrike }] } : undefined },
+        { name: 'VWAP', type: 'line', showSymbol: false, data: bars.map((bar) => bar.vwap), lineStyle: { color: ctk().warn, width: 1.2 }, smooth: false },
+        { name: 'Volume', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: bars.map((bar) => bar.volume), itemStyle: { color: ctk().negative } },
       ],
     }
   }, [session, symbols, activeSymbol, currentBars, frame, focusStrike])
@@ -581,21 +653,21 @@ function App() {
       data: (chain.rows || []).filter((row) => row.right === right && row.moneyness >= 0.75 && row.moneyness <= 1.25 && row.quality_score >= 25).map((row) => [xValue(row), row.iv]),
       lineStyle: { color, width: 1.8 }, itemStyle: { color },
     })
-    const fitted = smileAxis !== 'delta' && chain.svi ? [{ name: 'SVI', type: 'line', showSymbol: false, data: (chain.svi.curve || []).map((row) => [smileAxis === 'strike' ? chain.forward * row.moneyness : Math.log(row.moneyness), row.iv]), lineStyle: { color: '#f1c75b', width: 2.1 } }] : []
-    return { animation: false, tooltip: { trigger: 'axis', backgroundColor: '#111920', borderColor: '#34414d' }, legend: { top: 4, right: 8, textStyle: { color: '#8d9aa5' } }, grid: { left: 52, right: 18, top: 36, bottom: 34 }, xAxis: { type: 'value', name: smileAxis === 'delta' ? 'Delta' : smileAxis === 'moneyness' ? 'ln(K/F)' : 'Strike', nameTextStyle: { color: '#778590' }, scale: true, ...axis }, yAxis: { type: 'value', name: 'IV %', nameTextStyle: { color: '#778590' }, scale: true, ...axis }, series: [make('CALL', '#54d6b6'), make('PUT', '#ff7e8a'), ...fitted] }
+    const fitted = smileAxis !== 'delta' && chain.svi ? [{ name: 'SVI', type: 'line', showSymbol: false, data: (chain.svi.curve || []).map((row) => [smileAxis === 'strike' ? chain.forward * row.moneyness : Math.log(row.moneyness), row.iv]), lineStyle: { color: ctk().warn, width: 2.1 } }] : []
+    return { animation: false, tooltip: { trigger: 'axis', backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder }, legend: { top: 4, right: 8, textStyle: { color: ctk().label } }, grid: { left: 52, right: 18, top: 36, bottom: 34 }, xAxis: { type: 'value', name: smileAxis === 'delta' ? 'Delta' : smileAxis === 'moneyness' ? 'ln(K/F)' : 'Strike', nameTextStyle: { color: ctk().label }, scale: true, ...axisTheme() }, yAxis: { type: 'value', name: 'IV %', nameTextStyle: { color: ctk().label }, scale: true, ...axisTheme() }, series: [make('CALL', ctk().positive), make('PUT', ctk().negative), ...fitted] }
   }, [chain, smileAxis])
 
   const residualOption = useMemo(() => chain?.svi ? ({
-    animation: false, grid: { left: 45, right: 12, top: 18, bottom: 28 }, tooltip: { trigger: 'axis', backgroundColor: '#111920', borderColor: '#34414d' },
-    xAxis: { type: 'value', name: 'ln(K/F)', scale: true, ...axis }, yAxis: { type: 'value', name: 'IV Δ', ...axis },
-    series: [{ type: 'bar', data: (chain.svi.residuals || []).map((row) => [row.k, row.residual]), itemStyle: { color: (params) => params.value[1] >= 0 ? '#37c99b' : '#ef6673' } }],
+    animation: false, grid: { left: 45, right: 12, top: 18, bottom: 28 }, tooltip: { trigger: 'axis', backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder },
+    xAxis: { type: 'value', name: 'ln(K/F)', scale: true, ...axisTheme() }, yAxis: { type: 'value', name: 'IV Δ', ...axisTheme() },
+    series: [{ type: 'bar', data: (chain.svi.residuals || []).map((row) => [row.k, row.residual]), itemStyle: { color: (params) => params.value[1] >= 0 ? ctk().positive : ctk().negative } }],
   }) : null, [chain])
 
   const gexOption = useMemo(() => chain ? ({
-    animation: false, tooltip: { trigger: 'axis', backgroundColor: '#111920', borderColor: '#34414d' }, grid: { left: 68, right: 26, top: 24, bottom: 42 },
-    xAxis: { type: 'category', data: chain.gex_by_strike.map((row) => row.strike), axisLabel: { interval: 'auto', color: '#83909c' }, ...axis },
-    yAxis: { type: 'value', axisLabel: { formatter: (value) => formatCompact(value), color: '#83909c' }, ...axis },
-    series: [{ type: 'bar', data: chain.gex_by_strike.map((row) => ({ value: row.gex, itemStyle: { color: row.gex >= 0 ? '#37c99b' : '#ef6673' } })) }],
+    animation: false, tooltip: { trigger: 'axis', backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder }, grid: { left: 68, right: 26, top: 24, bottom: 42 },
+    xAxis: { type: 'category', data: chain.gex_by_strike.map((row) => row.strike), axisLabel: { interval: 'auto', color: ctk().axisLabel }, ...axisTheme() },
+    yAxis: { type: 'value', axisLabel: { formatter: (value) => formatCompact(value), color: ctk().axisLabel }, ...axisTheme() },
+    series: [{ type: 'bar', data: chain.gex_by_strike.map((row) => ({ value: row.gex, itemStyle: { color: row.gex >= 0 ? ctk().positive : ctk().negative } })) }],
   }) : null, [chain])
 
   const exposureOption = useMemo(() => {
@@ -610,34 +682,34 @@ function App() {
       grouped.set(row.strike, value)
     })
     const values = [...grouped.values()].filter((row) => Math.abs(row.strike / chain.spot - 1) <= 0.12)
-    return { animation: false, tooltip: { trigger: 'axis', backgroundColor: '#111920', borderColor: '#34414d' }, legend: { top: 2, right: 6, textStyle: { color: '#8d9aa5' } }, grid: { left: 55, right: 18, top: 32, bottom: 32 }, xAxis: { type: 'category', data: values.map((row) => row.strike), ...axis }, yAxis: { type: 'value', axisLabel: { formatter: formatCompact, color: '#83909c' }, ...axis }, series: [
-      { name: 'GEX', type: 'bar', data: values.map((row) => row.gex), itemStyle: { color: '#54d6b6' } },
+    return { animation: false, tooltip: { trigger: 'axis', backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder }, legend: { top: 2, right: 6, textStyle: { color: ctk().label } }, grid: { left: 55, right: 18, top: 32, bottom: 32 }, xAxis: { type: 'category', data: values.map((row) => row.strike), ...axisTheme() }, yAxis: { type: 'value', axisLabel: { formatter: formatCompact, color: ctk().axisLabel }, ...axisTheme() }, series: [
+      { name: 'GEX', type: 'bar', data: values.map((row) => row.gex), itemStyle: { color: ctk().positive } },
       { name: 'Vanna', type: 'line', showSymbol: false, data: values.map((row) => row.vanna), lineStyle: { color: '#70a5ff' } },
-      { name: 'Charm', type: 'line', showSymbol: false, data: values.map((row) => row.charm), lineStyle: { color: '#ff7e8a' } },
+      { name: 'Charm', type: 'line', showSymbol: false, data: values.map((row) => row.charm), lineStyle: { color: ctk().negative } },
     ] }
   }, [chain])
 
   const volOption = useMemo(() => volContext ? ({
-    animation: false, grid: { left: 42, right: 12, top: 18, bottom: 28 }, tooltip: { trigger: 'axis', backgroundColor: '#111920', borderColor: '#34414d' },
-    xAxis: { type: 'category', data: (volContext.history || []).map((row) => row.date.slice(5)), ...axis }, yAxis: { type: 'value', scale: true, ...axis },
-    series: [{ type: 'line', showSymbol: false, data: (volContext.history || []).map((row) => row.iv), lineStyle: { color: '#b395ff', width: 1.8 }, areaStyle: { color: 'rgba(179,149,255,.08)' } }],
+    animation: false, grid: { left: 42, right: 12, top: 18, bottom: 28 }, tooltip: { trigger: 'axis', backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder },
+    xAxis: { type: 'category', data: (volContext.history || []).map((row) => row.date.slice(5)), ...axisTheme() }, yAxis: { type: 'value', scale: true, ...axisTheme() },
+    series: [{ type: 'line', showSymbol: false, data: (volContext.history || []).map((row) => row.iv), lineStyle: { color: '#b395ff', width: 1.8 }, areaStyle: { color: ctk().gridSoft } }],
   }) : null, [volContext])
 
   const surfaceOption = useMemo(() => !surface ? null : !webgl ? ({
     animation: false,
-    tooltip: { position: 'top', backgroundColor: '#111920', borderColor: '#34414d' },
+    tooltip: { position: 'top', backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder },
     grid: { left: 58, right: 78, top: 20, bottom: 38 },
-    xAxis: { type: 'category', name: 'Moneyness', data: surface.grid?.[0]?.map((cell) => cell[0].toFixed(3)) || [], ...axis },
-    yAxis: { type: 'category', name: 'DTE', data: (surface.grid || []).map((row) => `${row[0][1]}D`), ...axis },
-    visualMap: { min: 10, max: 150, calculable: true, orient: 'vertical', right: 4, top: 20, textStyle: { color: '#8d9aa5' }, inRange: { color: ['#183c56', '#2b8f91', '#e3c65f', '#d95d6c'] } },
+    xAxis: { type: 'category', name: 'Moneyness', data: surface.grid?.[0]?.map((cell) => cell[0].toFixed(3)) || [], ...axisTheme() },
+    yAxis: { type: 'category', name: 'DTE', data: (surface.grid || []).map((row) => `${row[0][1]}D`), ...axisTheme() },
+    visualMap: { min: 10, max: 150, calculable: true, orient: 'vertical', right: 4, top: 20, textStyle: { color: ctk().label }, inRange: { color: ['#183c56', '#2b8f91', '#e3c65f', '#d95d6c'] } },
     series: [{ type: 'heatmap', data: (surface.grid || []).flatMap((row, y) => row.map((cell, x) => [x, y, cell[2]])), emphasis: { itemStyle: { borderColor: '#dce5ec', borderWidth: 1 } } }],
   }) : ({
     animation: false, tooltip: {}, backgroundColor: 'transparent',
-    visualMap: { show: true, min: 10, max: Math.min(150, Math.max(...(surface.points || []).map((point) => point.iv), 80)), calculable: true, orient: 'horizontal', left: 20, bottom: 4, textStyle: { color: '#8d9aa5' }, inRange: { color: ['#183c56', '#2b8f91', '#e3c65f', '#d95d6c'] } },
-    xAxis3D: { type: 'value', name: 'Moneyness', min: 0.75, max: 1.25, axisLabel: { color: '#83909c' } },
-    yAxis3D: { type: 'value', name: 'DTE', axisLabel: { color: '#83909c' } },
-    zAxis3D: { type: 'value', name: 'IV %', min: 0, max: 150, axisLabel: { color: '#83909c' } },
-    grid3D: { boxWidth: 150, boxDepth: 90, environment: '#0d141a', axisLine: { lineStyle: { color: '#43515d' } }, splitLine: { lineStyle: { color: '#26313a' } }, viewControl: { distance: 190, alpha: 24, beta: 35 } },
+    visualMap: { show: true, min: 10, max: Math.min(150, Math.max(...(surface.points || []).map((point) => point.iv), 80)), calculable: true, orient: 'horizontal', left: 20, bottom: 4, textStyle: { color: ctk().label }, inRange: { color: ['#183c56', '#2b8f91', '#e3c65f', '#d95d6c'] } },
+    xAxis3D: { type: 'value', name: 'Moneyness', min: 0.75, max: 1.25, axisLabel: { color: ctk().axisLabel } },
+    yAxis3D: { type: 'value', name: 'DTE', axisLabel: { color: ctk().axisLabel } },
+    zAxis3D: { type: 'value', name: 'IV %', min: 0, max: 150, axisLabel: { color: ctk().axisLabel } },
+    grid3D: { boxWidth: 150, boxDepth: 90, environment: ctk().env3d, axisLine: { lineStyle: { color: ctk().axis3d } }, splitLine: { lineStyle: { color: ctk().split3d } }, viewControl: { distance: 190, alpha: 24, beta: 35 } },
     series: [
       {
         id: 'iv-surface',
@@ -645,7 +717,7 @@ function App() {
         type: 'surface',
         shading: 'lambert',
         data: surface.grid.flat(),
-        wireframe: { show: true, lineStyle: { color: 'rgba(205,224,232,.24)', width: 0.7 } },
+        wireframe: { show: true, lineStyle: { color: ctk().sceneLine, width: 0.7 } },
         itemStyle: { opacity: 0.9 },
       },
       {
@@ -654,18 +726,18 @@ function App() {
         type: 'scatter3D',
         symbolSize: 2.2,
         data: (surface.points || []).filter((point, index) => index % 4 === 0 && point.iv <= 150).map((point) => [point.moneyness, point.tte_days, point.iv]),
-        itemStyle: { color: '#dce5ec', opacity: 0.34 },
+        itemStyle: { color: ctk().pointText, opacity: 0.34 },
       },
     ],
   }), [surface, webgl])
 
   const termOption = useMemo(() => surface ? ({
     animation: false,
-    tooltip: { trigger: 'axis', backgroundColor: '#111920', borderColor: '#34414d' },
+    tooltip: { trigger: 'axis', backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder },
     grid: { left: 58, right: 26, top: 28, bottom: 42 },
-    xAxis: { type: 'category', data: (surface.term || []).map((point) => `${point.dte}D`), ...axis },
-    yAxis: [{ type: 'value', name: 'ATM IV %', nameTextStyle: { color: '#778590' }, scale: true, ...axis }, { type: 'value', name: 'GEX', axisLabel: { formatter: formatCompact, color: '#83909c' }, splitLine: { show: false } }],
-    series: [{ name: 'ATM IV', type: 'line', data: (surface.term || []).map((point) => point.iv), showSymbol: true, symbolSize: 6, lineStyle: { color: '#70a5ff', width: 2 }, itemStyle: { color: '#70a5ff' }, areaStyle: { color: 'rgba(112,165,255,.10)' } }, { name: 'Expiry GEX', type: 'bar', yAxisIndex: 1, data: (surface.term || []).map((point) => point.net_gex), itemStyle: { color: 'rgba(84,214,182,.3)' } }],
+    xAxis: { type: 'category', data: (surface.term || []).map((point) => `${point.dte}D`), ...axisTheme() },
+    yAxis: [{ type: 'value', name: 'ATM IV %', nameTextStyle: { color: ctk().label }, scale: true, ...axisTheme() }, { type: 'value', name: 'GEX', axisLabel: { formatter: formatCompact, color: ctk().axisLabel }, splitLine: { show: false } }],
+    series: [{ name: 'ATM IV', type: 'line', data: (surface.term || []).map((point) => point.iv), showSymbol: true, symbolSize: 6, lineStyle: { color: '#70a5ff', width: 2 }, itemStyle: { color: ctk().accent }, areaStyle: { color: 'rgba(112,165,255,.10)' } }, { name: 'Expiry GEX', type: 'bar', yAxisIndex: 1, data: (surface.term || []).map((point) => point.net_gex), itemStyle: { color: 'rgba(84,214,182,.3)' } }],
   }) : null, [surface])
 
   const liveStrategyLegs = useMemo(() => strategyLegs.map((leg) => {
@@ -676,7 +748,7 @@ function App() {
   const payoffOption = useMemo(() => {
     const payoff = strategyAnalysis?.payoff
     if (!payoff?.length) return null
-    return { animation: false, grid: { left: 52, right: 14, top: 18, bottom: 30 }, tooltip: { trigger: 'axis', backgroundColor: '#111920', borderColor: '#34414d' }, xAxis: { type: 'category', data: payoff.map((row) => row[0]), ...axis }, yAxis: { type: 'value', axisLabel: { formatter: formatCompact, color: '#83909c' }, ...axis }, series: [{ type: 'line', showSymbol: false, data: payoff.map((row) => row[1]), lineStyle: { color: '#f1c75b', width: 2 }, areaStyle: { color: 'rgba(241,199,91,.08)' }, markLine: { symbol: 'none', data: [{ yAxis: 0 }], lineStyle: { color: '#56636e' } } }] }
+    return { animation: false, grid: { left: 52, right: 14, top: 18, bottom: 30 }, tooltip: { trigger: 'axis', backgroundColor: ctk().tooltipBg, borderColor: ctk().tooltipBorder }, xAxis: { type: 'category', data: payoff.map((row) => row[0]), ...axisTheme() }, yAxis: { type: 'value', axisLabel: { formatter: formatCompact, color: ctk().axisLabel }, ...axisTheme() }, series: [{ type: 'line', showSymbol: false, data: payoff.map((row) => row[1]), lineStyle: { color: ctk().warn, width: 2 }, areaStyle: { color: ctk().warnSoft }, markLine: { symbol: 'none', data: [{ yAxis: 0 }], lineStyle: { color: ctk().label } } }] }
   }, [strategyAnalysis])
 
   const compareMetrics = useMemo(() => {
